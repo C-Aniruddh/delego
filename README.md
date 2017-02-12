@@ -2,7 +2,7 @@
 
 Basic structure of a user in a collection:
 
- `
+ ```
  {
     "_id" : ObjectId("589d9999d9924ca0bc18e464"),
     
@@ -17,5 +17,5 @@ Basic structure of a user in a collection:
     "rsvp" : "arrived/pending",
     
     "type" : "delegate"
-}
- `
+}```
+ 
