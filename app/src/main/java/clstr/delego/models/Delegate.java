@@ -6,21 +6,25 @@ package clstr.delego.models;
 
 public class Delegate {
     private String name;
-    private String type;
-    private String user_image;
-    private String user_id;
+    private String committee;
+    private String country;
+    private String numid;
+    private String identifier;
 
     public String getName() {
         return name;
     }
 
     public String getImage(){
-        return user_image;
+        return country;
     }
     public String getType() {
-        return type;
+        return committee;
     }
     public String getID(){
-        return user_id;
+        return numid;
+    }
+    public String getIdentifier(){
+        return identifier;
     }
 }

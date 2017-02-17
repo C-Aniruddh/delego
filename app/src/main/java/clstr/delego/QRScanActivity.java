@@ -17,16 +17,14 @@ public class QRScanActivity extends AppCompatActivity {
 
     private SurfaceView mySurfaceView;
     private QREader qrEader;
+    private int flag = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getWindow().getDecorView().setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         setContentView(R.layout.activity_qr_scan);
 
@@ -38,17 +36,13 @@ public class QRScanActivity extends AppCompatActivity {
             @Override
             public void onDetected(final String data) {
                 Log.d("QR", "Value : " + data);
-                final String process_URI = "http://192.168.0.106:5000/user_details/" + data;
-                final String arrival_URI = "http://192.168.0.106:5000/user_arrival/" + data;
+                final String process_URI = Constants.WEB_SERVER + "user_details/" + data;
+                flag = 1;
+                final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + data;
                 Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
                 sendStuff.putExtra("key", process_URI);
                 sendStuff.putExtra("user_arrival", arrival_URI);
                 startActivity(sendStuff);
-                /*text.post(new Runnable() {
-                    @Override
-                    public void run() {
-                    }
-                });*/
             }
         }).facing(QREader.BACK_CAM)
                 .enableAutofocus(true)
@@ -60,9 +54,11 @@ public class QRScanActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Init and Start with SurfaceView
-        // -------------------------------
+        Log.d("TAG", "Call");
+        if(flag == 1){
+            Intent restart = new  Intent(QRScanActivity.this, MainActivity.class);
+            startActivity(restart);
+        }
         qrEader.initAndStart(mySurfaceView);
     }
 

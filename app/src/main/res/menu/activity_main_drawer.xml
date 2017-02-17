@@ -15,7 +15,7 @@
             android:icon="@drawable/account_search"
             android:title="@string/search" />
         <item
-            android:id="@+id/nav_manage"
+            android:id="@+id/nav_new_delegate"
             android:icon="@drawable/account_multiple_plus"
             android:title="@string/new_member" />
     </group>

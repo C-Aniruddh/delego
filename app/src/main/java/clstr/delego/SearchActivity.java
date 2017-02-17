@@ -44,14 +44,15 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
     private SearchHistoryTable mHistoryDatabase;
     private ListView mListView;
 
-    public static final String URL = "http://192.168.0.106:5000/search_delegate/";
+    public static final String URL = Constants.WEB_SERVER + "search_delegate/";
 
     private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
 
-    private static final String KEY_TYPE = "type";
+    private static final String KEY_COMMITTEE = "committee";
     private static final String KEY_NAME = "name";
-    private static final String KEY_IMAGE = "user_image";
-    private static final String KEY_USERID = "user_id";
+    private static final String KEY_IMAGE = "country";
+    private static final String KEY_USERID = "numid";
+    private static final String KEY_IDENTIFIER = "identifier";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +95,11 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
 
             HashMap<String, String> map = new HashMap<>();
 
-            map.put(KEY_TYPE, android.getType());
+            map.put(KEY_COMMITTEE, android.getType());
             map.put(KEY_NAME, android.getName());
             map.put(KEY_IMAGE, android.getImage());
             map.put(KEY_USERID, android.getID());
+            map.put(KEY_IDENTIFIER, android.getIdentifier());
 
             mAndroidMapList.add(map);
         }
@@ -112,9 +114,9 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-        final String user_id = mAndroidMapList.get(i).get(KEY_USERID);
-        final String process_URI = "http://192.168.0.106:5000/user_details/" + user_id;
-        final String arrival_URI = "http://192.168.0.106:5000/user_arrival/" + user_id;
+        final String user_id = mAndroidMapList.get(i).get(KEY_IDENTIFIER);
+        final String process_URI = Constants.WEB_SERVER + "user_details/" + user_id;
+        final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + user_id;
         Intent sendStuff = new Intent(SearchActivity.this, UserCheckin.class);
         sendStuff.putExtra("key", process_URI);
         sendStuff.putExtra("user_arrival", arrival_URI);
@@ -127,7 +129,7 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
     private void loadListView() {
 
         ListAdapter adapter = new SimpleAdapter(SearchActivity.this, mAndroidMapList, R.layout.all_users_listitem,
-                new String[] { KEY_TYPE, KEY_NAME},
+                new String[] { KEY_COMMITTEE, KEY_NAME},
                 new int[] { R.id.user_type_View, R.id.user_name_View});
 
         mListView.setAdapter(adapter);
@@ -168,7 +170,7 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
             final List<SearchItem> suggestionsList = new ArrayList<>();
 
             new HttpRequestTask(
-                    new HttpRequest("http://192.168.0.106:5000/all_names", HttpRequest.GET),
+                    new HttpRequest(Constants.WEB_SERVER + "all_names", HttpRequest.GET),
                     new HttpRequest.Handler() {
 
                         @Override

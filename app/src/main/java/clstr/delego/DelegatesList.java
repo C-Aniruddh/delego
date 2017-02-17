@@ -112,14 +112,14 @@ public class DelegatesList extends AppCompatActivity  {
         private static final String ARG_SECTION_NUMBER = "section_number";
         private ListView mListView;
 
-        public static final String URL = "http://192.168.0.106:5000/user_sort/";
+        public static final String URL = Constants.WEB_SERVER + "user_sort/";
 
         private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
 
-        private static final String KEY_TYPE = "type";
-        private static final String KEY_NAME = "name";
-        private static final String KEY_IMAGE = "user_image";
-        private static final String KEY_USERID = "user_id";
+        private static final String KEY_TYPE = "Role";
+        private static final String KEY_NAME = "Name";
+        private static final String KEY_IMAGE = "Committee";
+        private static final String KEY_USERID = "identifier";
 
         public PlaceholderFragment() {
         }
@@ -172,8 +172,8 @@ public class DelegatesList extends AppCompatActivity  {
         @Override
         public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
             final String user_id = mAndroidMapList.get(i).get(KEY_USERID);
-            final String process_URI = "http://192.168.0.106:5000/user_details/" + user_id;
-            final String arrival_URI = "http://192.168.0.106:5000/user_arrival/" + user_id;
+            final String process_URI = Constants.WEB_SERVER + "user_details/" + user_id;
+            final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + user_id;
             Intent sendStuff = new Intent(getActivity(), UserCheckin.class);
             sendStuff.putExtra("key", process_URI);
             sendStuff.putExtra("user_arrival", arrival_URI);

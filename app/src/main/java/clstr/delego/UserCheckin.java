@@ -2,6 +2,8 @@ package clstr.delego;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -44,20 +46,23 @@ public class UserCheckin extends SlidingActivity {
                     public void response(HttpResponse response) {
                         if (response.code == 200) {
                             Ason ason = new Ason(response.body);
-                            String user_name = ason.getString("name");
+                            String user_name = ason.getString("Name");
                             setTitle(user_name);
-                            String user_image = ason.getString("user_image");
+                            String user_image = ason.getString("Image");
                             Log.d("TAG", user_image);
                             setUserImage(user_image);
-                            String user_age = ason.getString("user_type");
-                            TextView age = (TextView) findViewById(R.id.typeView);
-                            age.setText(user_age);
-                            String user_type = ason.getString("user_age");
-                            TextView type = (TextView) findViewById(R.id.ageView);
+                            String user_committee= ason.getString("Committee");
+                            TextView committee = (TextView) findViewById(R.id.committeeView);
+                            committee.setText(user_committee);
+                            String user_type = ason.getString("Country");
+                            TextView type = (TextView) findViewById(R.id.countryView);
                             type.setText(user_type);
-                            String user_id = ason.getString("user_id");
+                            String user_id = ason.getString("Numid");
                             TextView id = (TextView) findViewById(R.id.idView);
                             id.setText(user_id);
+                            String user_role = ason.getString("Role");
+                            TextView role = (TextView) findViewById(R.id.roleView);
+                            role.setText(user_role);
                         } else {
                             String ai_response = "Can't reach the server at the moment. Please try again later.";
                             TextView textView = (TextView) findViewById(R.id.idView);
@@ -98,6 +103,10 @@ public class UserCheckin extends SlidingActivity {
                                 String server_response = "The delegate has arrived!";
                                 Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
                                         .setAction("Action", null).show();
+                                FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+
+
                             } else {
                                 String server_response = "Can't reach the server at the moment. Please try again later.";
                                 Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
@@ -108,5 +117,6 @@ public class UserCheckin extends SlidingActivity {
 
         }
     };
+
 
 }

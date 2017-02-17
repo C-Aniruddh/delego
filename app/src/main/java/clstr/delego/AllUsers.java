@@ -23,7 +23,7 @@ public class AllUsers extends AppCompatActivity implements LoadJSONTask.Listener
 
     private ListView mListView;
 
-    public static final String URL = "http://192.168.0.106:5000/allusers";
+    public static final String URL = Constants.WEB_SERVER+ "allusers";
 
     private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
 
@@ -53,8 +53,10 @@ public class AllUsers extends AppCompatActivity implements LoadJSONTask.Listener
             map.put(KEY_NAME, android.getName());
             map.put(KEY_IMAGE, android.getImage());
             map.put(KEY_USERID, android.getID());
+            Toast.makeText(this, map.toString(), Toast.LENGTH_SHORT).show();
 
             mAndroidMapList.add(map);
+
         }
 
         loadListView();
@@ -69,8 +71,9 @@ public class AllUsers extends AppCompatActivity implements LoadJSONTask.Listener
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         final String user_id = mAndroidMapList.get(i).get(KEY_USERID);
-        final String process_URI = "http://192.168.0.106:5000/user_details/" + user_id;
-        final String arrival_URI = "http://192.168.0.106:5000/user_arrival/" + user_id;
+        //Toast.makeText(this, user_id, Toast.LENGTH_SHORT).show();
+        final String process_URI = Constants.WEB_SERVER + "user_details/" + Integer.parseInt(user_id);
+        final String arrival_URI = Constants.WEB_SERVER +"user_arrival/" + Integer.parseInt(user_id);
         Intent sendStuff = new Intent(AllUsers.this, UserCheckin.class);
         sendStuff.putExtra("key", process_URI);
         sendStuff.putExtra("user_arrival", arrival_URI);
@@ -85,7 +88,7 @@ public class AllUsers extends AppCompatActivity implements LoadJSONTask.Listener
         ListAdapter adapter = new SimpleAdapter(AllUsers.this, mAndroidMapList, R.layout.all_users_listitem,
                 new String[] { KEY_TYPE, KEY_NAME},
                 new int[] { R.id.user_type_View, R.id.user_name_View});
-
+        Toast.makeText(this, "InsideLoad List View", Toast.LENGTH_SHORT).show();
         mListView.setAdapter(adapter);
 
     }

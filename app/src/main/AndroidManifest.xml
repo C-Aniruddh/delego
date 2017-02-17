@@ -44,7 +44,41 @@
         <activity
             android:name=".SearchActivity"
             android:label="@string/title_activity_search"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".AddDelegate"
+            android:label="@string/title_activity_add_delegate"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DelegateListActivity"
+            android:label="@string/title_delegate_list"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".DelegateDetailActivity"
+            android:label="@string/title_delegate_detail"
+            android:parentActivityName=".DelegateListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="clstr.delego.DelegateListActivity" />
+        </activity>
+        <activity
+            android:name=".DelegateSortView"
+            android:label="@string/title_activity_delegate_sort_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CommitteeView"
+            android:label="@string/title_activity_committee_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".CommitteeWiseView"
+            android:label="@string/title_activity_committee_wise_view"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".SetupActivity"></activity><!-- ATTENTION: This was auto-generated to add Google Play services to your project for
+     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information. -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
     </application>
 
 </manifest>

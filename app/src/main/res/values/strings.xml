@@ -115,4 +115,20 @@
     <string name="clear_search_history">Clear Search History</string>
     <string name="delego">Delego</string>
     <string name="delegate_clstr_tech">delegate@clstr.tech</string>
+    <string name="title_activity_add_delegate">AddDelegate</string>
+    <string name="client_id">354a459c20c185d</string>
+    <string name="client_secret">d9d0f25f5e9ff83cfc88105280e10c88246e0eb4</string>
+    <string name="name">Name</string>
+    <string name="DOB">03/12/1998</string>
+    <string name="title_activity_delegate_view">DelegateView</string>
+    <string name="committee">Committee</string>
+    <string name="country">Country</string>
+    <string name="user_role">user_role</string>
+    <string name="role">Role</string>
+    <string name="user_country">user_country</string>
+    <string name="title_delegate_list">Delegates</string>
+    <string name="title_delegate_detail">Delegate Detail</string>
+    <string name="title_activity_delegate_sort_view">DelegateSortView</string>
+    <string name="title_activity_committee_view">CommitteeView</string>
+    <string name="title_activity_committee_wise_view">CommitteeWiseView</string>
 </resources>

@@ -90,15 +90,17 @@ public class MainActivity extends AppCompatActivity
             startActivity(qr_scan);
             // Handle the camera action
         } else if (id == R.id.nav_all_members) {
-            Intent all_members = new Intent(MainActivity.this, DelegatesList.class);
+            Intent all_members = new Intent(MainActivity.this, DelegateSortView.class);
             startActivity(all_members);
         } else if (id == R.id.nav_search) {
             Intent search = new Intent(MainActivity.this, SearchActivity.class);
             startActivity(search);
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_new_delegate) {
+            Intent addNew = new Intent(MainActivity.this, AddDelegate.class);
+            startActivity(addNew);
         } else if (id == R.id.nav_share) {
-
+            Intent setup = new Intent(MainActivity.this, SetupActivity.class);
+            startActivity(setup);
         } else if (id == R.id.nav_send) {
 
         }
