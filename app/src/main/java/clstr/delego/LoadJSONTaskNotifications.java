@@ -4,9 +4,6 @@ import android.os.AsyncTask;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import clstr.delego.models.Delegate;
-import clstr.delego.models.Notification;
-import clstr.delego.models.Response;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -15,35 +12,38 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 
+import clstr.delego.models.Delegate;
+import clstr.delego.models.Notification;
+import clstr.delego.models.NotificationResponse;
+import clstr.delego.models.Response;
+
 /**
  * Created by aniruddhc on 12/2/17.
  */
 
-public class LoadJSONTask extends AsyncTask<String, Void, Response> {
+public class LoadJSONTaskNotifications extends AsyncTask<String, Void, NotificationResponse> {
 
-    public LoadJSONTask(Listener listener) {
+    public LoadJSONTaskNotifications(Listener listener) {
 
         mListener = listener;
     }
 
     public interface Listener {
 
-        void onLoaded(List<Delegate> androidList);
-
-
+        void onLoaded(List<Notification> androidList);
         void onError();
     }
 
     private Listener mListener;
 
     @Override
-    protected Response doInBackground(String... strings) {
+    protected NotificationResponse doInBackground(String... strings) {
         try {
 
             String stringResponse = loadJSON(strings[0]);
             Gson gson = new Gson();
 
-            return gson.fromJson(stringResponse, Response.class);
+            return gson.fromJson(stringResponse, NotificationResponse.class);
         } catch (IOException e) {
             e.printStackTrace();
             return null;
@@ -54,7 +54,7 @@ public class LoadJSONTask extends AsyncTask<String, Void, Response> {
     }
 
     @Override
-    protected void onPostExecute(Response response) {
+    protected void onPostExecute(NotificationResponse response) {
 
         if (response != null) {
 

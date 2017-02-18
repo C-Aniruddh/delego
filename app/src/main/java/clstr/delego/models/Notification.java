@@ -5,12 +5,12 @@ package clstr.delego.models;
  */
 
 public class Notification {
-    private String name;
+    private String title;
     private String content;
     private String numid;
 
     public String getTitle() {
-        return name;
+        return title;
     }
 
     public String getContent() {

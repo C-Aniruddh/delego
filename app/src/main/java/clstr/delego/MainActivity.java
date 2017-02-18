@@ -16,13 +16,24 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
+import android.widget.ListAdapter;
+import android.widget.ListView;
+import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.lapism.searchview.SearchHistoryTable;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+import clstr.delego.models.Delegate;
+import clstr.delego.models.Notification;
+
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LoadJSONTaskNotifications.Listener, AdapterView.OnItemClickListener {
 
     private SearchHistoryTable mHistoryDatabase;
     private NavigationView mNavigation;
@@ -30,6 +41,15 @@ public class MainActivity extends AppCompatActivity
 
     private TextView mDrawerHeaderTitle;
     private TextView mDrawerHeaderEmail;
+
+    private ListView mListView;
+
+    public static final String URL = Constants.WEB_SERVER+ "notifications";
+
+    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
+
+    private static final String KEY_TITLE = "title";
+    private static final String KEY_CONTENT = "content";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,6 +72,9 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+        mListView = (ListView) findViewById(R.id.list_view_notifications);
+        mListView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        new LoadJSONTaskNotifications((LoadJSONTaskNotifications.Listener) this).execute(URL);
 
         //  Declare a new thread to do a preference check
         Thread t = new Thread(new Runnable() {
@@ -126,6 +149,50 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    public void onLoaded(List<Notification> androidList) {
+
+        for (Notification android : androidList) {
+
+            HashMap<String, String> map = new HashMap<>();
+
+            map.put(KEY_TITLE, android.getTitle());
+            map.put(KEY_CONTENT, android.getContent());
+            Toast.makeText(this, map.toString(), Toast.LENGTH_SHORT).show();
+            mAndroidMapList.add(map);
+
+        }
+
+        loadListView();
+    }
+
+    @Override
+    public void onError() {
+
+        Toast.makeText(this, "Error !", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+        final String title = mAndroidMapList.get(i).get(KEY_TITLE);
+        final String content = mAndroidMapList.get(i).get(KEY_CONTENT);
+        Intent sendStuff = new Intent(MainActivity.this, NotificationView.class);
+        sendStuff.putExtra("title", title);
+        sendStuff.putExtra("content", content);
+        startActivity(sendStuff);
+
+    }
+
+    private void loadListView() {
+
+        ListAdapter adapter = new SimpleAdapter(MainActivity.this, mAndroidMapList, R.layout.notifications_list_item,
+                new String[] { KEY_TITLE, KEY_CONTENT},
+                new int[] { R.id.notificationTitleView, R.id.notificationContentView});
+        Toast.makeText(this, "InsideLoad List View", Toast.LENGTH_SHORT).show();
+        mListView.setAdapter(adapter);
+
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
@@ -166,14 +233,13 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_new_delegate) {
             Intent addNew = new Intent(MainActivity.this, AddDelegate.class);
             startActivity(addNew);
-        } else if (id == R.id.nav_share) {
+        } /*else if (id == R.id.nav_share) {
             Intent setup = new Intent(MainActivity.this, SetupActivity.class);
             startActivity(setup);
         } else if (id == R.id.nav_send) {
             Intent login = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(login);
-
-        } else if (id == R.id.nav_logout) {
+            startActivity(login);*/
+        else if (id == R.id.nav_logout) {
             SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
             editor.putString("user_status", "false");
             editor.commit();
