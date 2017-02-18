@@ -1,6 +1,7 @@
 package clstr.delego;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -28,21 +29,35 @@ public class QRScanActivity extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
         setContentView(R.layout.activity_qr_scan);
 
-
+        SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String type = "";
+        type = prefs.getString("type", "owner");
         mySurfaceView = (SurfaceView) findViewById(R.id.camera_view);
 
+        final String finalType = type;
         qrEader = new QREader.Builder(this, mySurfaceView, new QRDataListener() {
 
             @Override
             public void onDetected(final String data) {
-                Log.d("QR", "Value : " + data);
-                final String process_URI = Constants.WEB_SERVER + "user_details/" + data;
-                flag = 1;
-                final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + data;
-                Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
-                sendStuff.putExtra("key", process_URI);
-                sendStuff.putExtra("user_arrival", arrival_URI);
-                startActivity(sendStuff);
+                if (finalType.equals("owner")) {
+                    Log.d("QR", "Value : " + data);
+                    final String process_URI = Constants.WEB_SERVER + "user_details/" + data;
+                    flag = 1;
+                    final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + data;
+                    Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
+                    sendStuff.putExtra("key", process_URI);
+                    sendStuff.putExtra("user_arrival", arrival_URI);
+                    startActivity(sendStuff);
+                } else {
+                    Log.d("QR", "Value : " + data);
+                    final String process_URI = Constants.WEB_SERVER + "user_details/" + data;
+                    flag = 1;
+                    final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + data;
+                    Intent sendStuff = new Intent(QRScanActivity.this, UserShare.class);
+                    sendStuff.putExtra("key", process_URI);
+                    sendStuff.putExtra("user_arrival", arrival_URI);
+                    startActivity(sendStuff);
+                }
             }
         }).facing(QREader.BACK_CAM)
                 .enableAutofocus(true)

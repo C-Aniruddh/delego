@@ -1,9 +1,12 @@
 package clstr.delego;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -13,6 +16,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.lapism.searchview.SearchHistoryTable;
 
@@ -20,6 +25,11 @@ public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private SearchHistoryTable mHistoryDatabase;
+    private NavigationView mNavigation;
+    private View mHeaderView;
+
+    private TextView mDrawerHeaderTitle;
+    private TextView mDrawerHeaderEmail;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +37,12 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        mNavigation = (NavigationView) findViewById(R.id.nav_view);
+        mHeaderView = mNavigation.getHeaderView(0);
+
+        mDrawerHeaderTitle = (TextView) mHeaderView.findViewById(R.id.userFullname);
+        mDrawerHeaderEmail = (TextView) mHeaderView.findViewById(R.id.userEmail);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -36,6 +52,58 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Action", null).show();
             }
         });
+
+        //  Declare a new thread to do a preference check
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  Initialize SharedPreferences
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+
+                //  Create a new boolean and preference and set it to true
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+                //  If the activity has never started before...
+                if (isFirstStart) {
+
+                    //  Launch app intro
+                    Intent i = new Intent(MainActivity.this, SetupActivity.class);
+                    startActivity(i);
+
+                    //  Make a new preferences editor
+                    SharedPreferences.Editor e = getPrefs.edit();
+
+                    //  Edit preference to make it false because we don't want this to run again
+                    e.putBoolean("firstStart", false);
+
+                    //  Apply changes
+                    e.apply();
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
+
+        SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String status = "";
+        String name;
+        String email = "";
+        status = prefs.getString("user_status", "false");//"No name defined" is the default value.
+        name = prefs.getString("name", "Delego");
+        email = prefs.getString("email", "delego@clstr.tech");
+        Toast toast = Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT);
+        toast.show();
+        if (status.equals("false")) {
+            Intent login = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(login);
+        } else {
+            //TextView userFullname = (TextView) findViewById(R.id.userFullname);
+            //TextView userEmail = (TextView) findViewById(R.id.userEmail);
+            mDrawerHeaderTitle.setText(name);
+            mDrawerHeaderEmail.setText(email);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -102,7 +170,15 @@ public class MainActivity extends AppCompatActivity
             Intent setup = new Intent(MainActivity.this, SetupActivity.class);
             startActivity(setup);
         } else if (id == R.id.nav_send) {
+            Intent login = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(login);
 
+        } else if (id == R.id.nav_logout) {
+            SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
+            editor.putString("user_status", "false");
+            editor.commit();
+            Intent restart = new Intent(MainActivity.this, MainActivity.class);
+            startActivity(restart);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

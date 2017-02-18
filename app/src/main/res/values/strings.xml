@@ -131,4 +131,26 @@
     <string name="title_activity_delegate_sort_view">DelegateSortView</string>
     <string name="title_activity_committee_view">CommitteeView</string>
     <string name="title_activity_committee_wise_view">CommitteeWiseView</string>
+    <string name="title_activity_login">Sign in</string>
+
+    <!-- Strings related to login -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_incorrect_password">This password is incorrect</string>
+    <string name="error_field_required">This field is required</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email
+        completions."
+    </string>
+    <string name="forgot_password">Forgot your password?</string>
+    <string name="phone">Phone</string>
+    <string name="xxxxx_xxxxx">XXXXX XXXXX</string>
+    <string name="email">Email</string>
+    <string name="logout">Logout</string>
+    <string name="title">Title</string>
+    <string name="content">Content</string>
+    <string name="notif_title">Notifcation Title</string>
 </resources>

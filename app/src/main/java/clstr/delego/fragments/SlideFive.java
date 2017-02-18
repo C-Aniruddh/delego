@@ -1,8 +1,8 @@
 package clstr.delego.fragments;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,11 +13,15 @@ import clstr.delego.R;
  * Created by aniruddhc on 17/2/17.
  */
 
-public class SlideLogin extends Fragment {
+public class SlideFive extends Fragment {
     private static final String ARG_LAYOUT_RES_ID = "layoutResId";
+    private int layoutResId;
 
-    public static SlideLogin newInstance(int layoutResId) {
-        SlideLogin sampleSlide = new SlideLogin();
+    public SlideFive() {
+    }
+
+    public static SlideFive newInstance(int layoutResId) {
+        SlideFive sampleSlide = new SlideFive();
 
         Bundle bundleArgs = new Bundle();
         bundleArgs.putInt(ARG_LAYOUT_RES_ID, layoutResId);
@@ -25,10 +29,6 @@ public class SlideLogin extends Fragment {
 
         return sampleSlide;
     }
-
-    private int layoutResId;
-
-    public SlideLogin() {}
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +41,8 @@ public class SlideLogin extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.user_login, container, false);
+        return inflater.inflate(R.layout.slide_five, container, false);
+
+
     }
 }
