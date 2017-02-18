@@ -40,6 +40,8 @@ def user_details(user_id):
         user_rsvp = find_user['rsvp']
         user_image = find_user['image']
         user_numid = find_user['numid']
+        user_email = find_user['email_id']
+        user_phonenumber = find_user['phone_number']
         """user_name = find_user['name']
         user_country = find_user['country']
         user_committee = find_user['committee']
@@ -48,7 +50,7 @@ def user_details(user_id):
         user_rsvp = find_user['rsvp']
         user_image = find_user['image']
         user_numid = find_user['numid']"""
-        return json.dumps({'Name': user_name, 'Country' : user_country, 'Committee' : user_committee, 'Numid':str(user_numid), 'Role': user_role, 'Portfolios' :user_portfolios, 'RSVP' : user_rsvp, 'Image' : user_image})
+        return json.dumps({'Name': user_name, 'Country' : user_country, 'Committee' : user_committee, 'Numid':str(user_numid), 'Role': user_role, 'Portfolios' :user_portfolios, 'RSVP' : user_rsvp, 'Image' : user_image, 'Email' : user_email, 'Phone' : user_phonenumber})
     else:
         return json.dumps({'Name' : 'Authentication Token failed.', 'Country' : 'Authentication Token failed', 'Committee' : 'Authentication Token failed', 'Numid': 'Authentication Token failed', 'Role': 'Authentication Token failed', 'Portfolios':'Authentication Token failed', 'RSVP' : 'Authentication Token failed', 'Image' : 'Authentication Token failed'})
 
@@ -99,25 +101,33 @@ def by_committee(committee_name):
 #        print 'Committee Idiot: ' + str(x)
     return dumps({'delegate' :find_users})
 
-@app.route('/login/<json_data>', methods=['POST', 'GET'])
-def login(json_data):
+#@app.route('/login/', methods=['POST'])
+@app.route('/login', methods=['POST', 'GET'])
+def login():
+    print "Username : " + str(request.form['username']) + "     PAssword : " + str(request.form['password'])
+    global login_flag
     users = mongo.db.users
-    details = json.loads(json_data)
-    login_user = details['name']
-    login_pass = details['password']
-    find_user = users.find_one({'name' : login_user})
-    randint = random.randint(100000, 999999)
-    ecoding_string = '%s%s' %(login_user, randint)
-    print login_pass
+    login_user = users.find_one({'name' : request.form['username']})
+    login_username = login_user['name']
+    login_mail = login_user['email']
+    login_fullname = login_user['fullname']
+    login_user_type = login_user['user_type']
+    randint = random.randint(100000,999999)
+    #data = str(request.values)
+    #print data
+    auth_string = '%s%s' % (request.form['username'], randint)
+    #auth_token = bcrypt.hashpw(request.form['username'].encode('utf-8'), bcrypt.gensalt())
+    #print login_user
+    if login_user:
+       print "Inside login_user"
+       if bcrypt.hashpw(request.form['password'].encode('utf-8'), login_user['password'].encode('utf-8'))==login_user['password'].encode('utf-8'):
+            print "Inside bcrypt"
+            auth_token = bcrypt.hashpw(auth_string.encode('utf-8'), bcrypt.gensalt())
+            print "Auth token :  " +  str(auth_token)
+            login_flag = 1#session['username'] = request.form['username']
+            return json.dumps({'auth_token' : auth_token, 'login' : 'success', 'email':login_mail, 'username':login_username, 'fullname' : login_fullname, 'type':login_user_type})#return redirect(url_for('index'))
+    return json.dumps({'login': 'unsuccessful'})
 
-    if (bcrypt.hashpw(find_user['password'].encode('utf-8'),
-                      login_pass.encode('utf-8')) == find_user['password'].encode('utf-8')):
-        auth_token = bcrypt.hashpw(ecoding_string.encode('utf-8'), bcrypt.gensalt())
-        users.update_one({'name': login_user}, {"$set": {'auth_token': auth_token}})
-        return json.dumps({'login_status' : 'successful', 'auth_token' : auth_token})
-
-
-    return json.dumps(details)
 
 @app.route('/register', methods=['POST', 'GET'])
 def register():
@@ -137,6 +147,26 @@ def register():
         return 'A user with that Email id/username already exists'
 
     return render_template('register.html')
+
+
+@app.route('/add_notification', methods=['POST', 'GET'])
+def add_notification():
+    if request.method == 'POST':
+        notifications = mongo.db.notifications
+        notification_title = request.form['title']
+        notification_content = request.form['content']
+        find_all = notifications.find()
+        all_count = find_all.count()
+        notification_id = str(all_count + 1)
+        notifications.insert({'numid' : notification_id, 'title':notification_title, 'content':notification_content})
+        return 'Done'
+    return render_template('newnotif.html')
+
+@app.route('/notifications', methods=['POST', 'GET'])
+def notifications():
+    notifications = mongo.db.notifications
+    find_notifs = notifications.find({}, {'_id': False})
+    return dumps({'notification': find_notifs})
 
 if __name__ == '__main__':
     app.secret_key = 'mysecret'
