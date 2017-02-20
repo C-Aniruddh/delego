@@ -1,33 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/nav_qr_scan"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/scan_qr_code" />
-        <item
-            android:id="@+id/nav_all_members"
-            android:icon="@drawable/account_multiple"
-            android:title="@string/all_members" />
-        <item
-            android:id="@+id/nav_search"
-            android:icon="@drawable/account_search"
-            android:title="@string/search" />
-        <item
-            android:id="@+id/nav_new_delegate"
-            android:icon="@drawable/account_multiple_plus"
-            android:title="@string/new_member" />
+    <group android:checkableBehavior="single"
+        android:id="@+id/menu_item">
+
     </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/extra">
 
-    <item android:title="@string/communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_logout"
-                android:icon="@drawable/logout"
-                android:title="@string/logout" />
-
-        </menu>
-    </item>
-
+    </group>
 </menu>

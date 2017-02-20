@@ -51,6 +51,8 @@ public class MainActivity extends AppCompatActivity
     private static final String KEY_TITLE = "title";
     private static final String KEY_CONTENT = "content";
 
+    private String user_type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,6 +111,7 @@ public class MainActivity extends AppCompatActivity
         // Start the thread
         t.start();
 
+
         SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
         String status = "";
         String name;
@@ -116,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         status = prefs.getString("user_status", "false");//"No name defined" is the default value.
         name = prefs.getString("name", "Delego");
         email = prefs.getString("email", "delego@clstr.tech");
+        user_type = prefs.getString("type", "user");
         Toast toast = Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT);
         toast.show();
         if (status.equals("false")) {
@@ -136,6 +140,25 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+        Menu menu = navigationView.getMenu();
+
+        if (user_type.equals("owner")){
+            menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.ic_menu_camera);
+            menu.add(R.id.menu_item, 2, 200, "All members").setIcon(R.drawable.account_multiple);
+            menu.add(R.id.menu_item, 3, 300, "Search").setIcon(R.drawable.account_search);
+            menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
+            menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
+            menu.setGroupCheckable(R.id.menu_item, true, true);
+            menu.setGroupVisible(R.id.menu_item, true);
+        } else if(user_type.equals("user")){
+            menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.ic_menu_camera);
+            menu.add(R.id.menu_item, 2, 200, "Profile").setIcon(R.drawable.account_multiple);
+            menu.add(R.id.menu_item, 3, 300, "Schedule").setIcon(R.drawable.ic_menu_camera);
+            menu.add(R.id.menu_item, 4, 400, "About Mun").setIcon(R.drawable.alert_circle);
+            menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
+            menu.setGroupCheckable(R.id.menu_item, true, true);
+            menu.setGroupVisible(R.id.menu_item, true);
+        }
     }
 
     @Override
@@ -220,31 +243,53 @@ public class MainActivity extends AppCompatActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.nav_qr_scan) {
+        if (user_type.equals("owner")){
+            if (id == 1) {
+                Intent qr_scan = new Intent(MainActivity.this, QRScanActivity.class);
+                startActivity(qr_scan);
+                // Handle the camera action
+            } else if (id == 2){
+                Intent all_members = new Intent(MainActivity.this, DelegateSortView.class);
+                startActivity(all_members);
+            } else if (id == 3){
+                Intent search = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(search);
+            } else if (id == 4){
+                Intent addNew = new Intent(MainActivity.this, AddDelegate.class);
+                startActivity(addNew);
+            } else if (id == 5){
+                SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
+                editor.putString("user_status", "false");
+                editor.commit();
+                Intent restart = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(restart);
+            }
+        } else if (user_type.equals("user")){
+            if (id == 1) {
+                Intent qr_scan = new Intent(MainActivity.this, QRScanActivity.class);
+                startActivity(qr_scan);
+                // Handle the camera action
+            } else if (id == 2){
+                Snackbar.make(getWindow().getDecorView().getRootView(), "Profile", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else if (id == 3){
+                Snackbar.make(getWindow().getDecorView().getRootView(), "Schedule", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else if (id == 4){
+                Snackbar.make(getWindow().getDecorView().getRootView(), "About", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
+            } else if (id == 5){
+                SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
+                editor.putString("user_status", "false");
+                editor.commit();
+                Intent restart = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(restart);
+            }
+        }
+        if (id == 1) {
             Intent qr_scan = new Intent(MainActivity.this, QRScanActivity.class);
             startActivity(qr_scan);
             // Handle the camera action
-        } else if (id == R.id.nav_all_members) {
-            Intent all_members = new Intent(MainActivity.this, DelegateSortView.class);
-            startActivity(all_members);
-        } else if (id == R.id.nav_search) {
-            Intent search = new Intent(MainActivity.this, SearchActivity.class);
-            startActivity(search);
-        } else if (id == R.id.nav_new_delegate) {
-            Intent addNew = new Intent(MainActivity.this, AddDelegate.class);
-            startActivity(addNew);
-        } /*else if (id == R.id.nav_share) {
-            Intent setup = new Intent(MainActivity.this, SetupActivity.class);
-            startActivity(setup);
-        } else if (id == R.id.nav_send) {
-            Intent login = new Intent(MainActivity.this, LoginActivity.class);
-            startActivity(login);*/
-        else if (id == R.id.nav_logout) {
-            SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
-            editor.putString("user_status", "false");
-            editor.commit();
-            Intent restart = new Intent(MainActivity.this, MainActivity.class);
-            startActivity(restart);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
