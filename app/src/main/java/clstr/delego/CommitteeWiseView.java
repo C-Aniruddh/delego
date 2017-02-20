@@ -80,6 +80,7 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
             new LoadJSONTask(this).execute(final_uri);
         } else if(position == 4){
             String final_uri = URL + "GA Legal";
+            final_uri = final_uri.replaceAll(" ", "%20");
             collapsibleToolbar.setTitle("GA Legal");
             image.setImageResource(R.drawable.ga_legal);
             mListView = (ListView) findViewById(R.id.list_view_commwise);
@@ -101,6 +102,7 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
             new LoadJSONTask(this).execute(final_uri);
         } else if (position == 7){
             String final_uri = URL + "India, Inc";
+            final_uri = final_uri.replaceAll(" ", "%20");
             collapsibleToolbar.setTitle("India, Inc");
             image.setImageResource(R.drawable.india_inc);
             mListView = (ListView) findViewById(R.id.list_view_commwise);
@@ -108,6 +110,7 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
             new LoadJSONTask(this).execute(final_uri);
         } else if (position == 8){
             String final_uri = URL + "League of Nations";
+            final_uri = final_uri.replaceAll(" ", "%20");
             collapsibleToolbar.setTitle("League of Nations");
             image.setImageResource(R.drawable.league_of_nations);
             mListView = (ListView) findViewById(R.id.list_view_commwise);

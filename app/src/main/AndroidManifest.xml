@@ -97,7 +97,10 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
-        <activity android:name=".NotificationView"></activity>
+        <activity android:name=".NotificationView"
+            android:excludeFromRecents="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.Sliding.Light"></activity>
     </application>
 
 </manifest>

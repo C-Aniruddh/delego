@@ -70,7 +70,6 @@ public class CommitteeView extends AppCompatActivity implements LoadJSONTask.Lis
             mAndroidMapList.add(map);
 
         }
-
         loadListView();
     }
 

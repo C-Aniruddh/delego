@@ -97,6 +97,13 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         // Set up the login form.
+        SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String status = "";
+        status = prefs.getString("user_status", "false");//"No name defined" is the default value.
+        if (status.equals("true")){
+            Intent openMain = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(openMain);
+        }
         mEmailView = (AutoCompleteTextView) findViewById(R.id.email);
         populateAutoComplete();
         getWindow().getDecorView().setSystemUiVisibility(

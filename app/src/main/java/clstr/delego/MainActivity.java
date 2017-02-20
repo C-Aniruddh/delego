@@ -50,9 +50,11 @@ public class MainActivity extends AppCompatActivity
 
     private static final String KEY_TITLE = "title";
     private static final String KEY_CONTENT = "content";
+    private static final String KEY_IMAGE = "image";
 
     private String user_type;
-
+    private String name;
+    private String email;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,11 +116,9 @@ public class MainActivity extends AppCompatActivity
 
         SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
         String status = "";
-        String name;
-        String email = "";
         status = prefs.getString("user_status", "false");//"No name defined" is the default value.
-        name = prefs.getString("name", "Delego");
-        email = prefs.getString("email", "delego@clstr.tech");
+        name = prefs.getString("fullname", "Delego");
+        email = prefs.getString("email_id", "delego@clstr.tech");
         user_type = prefs.getString("type", "user");
         Toast toast = Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT);
         toast.show();
@@ -198,9 +198,11 @@ public class MainActivity extends AppCompatActivity
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         final String title = mAndroidMapList.get(i).get(KEY_TITLE);
         final String content = mAndroidMapList.get(i).get(KEY_CONTENT);
+        final String image = mAndroidMapList.get(i).get(KEY_IMAGE);
         Intent sendStuff = new Intent(MainActivity.this, NotificationView.class);
         sendStuff.putExtra("title", title);
         sendStuff.putExtra("content", content);
+        sendStuff.putExtra("image", image);
         startActivity(sendStuff);
 
     }

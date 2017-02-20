@@ -8,7 +8,7 @@ public class Notification {
     private String title;
     private String content;
     private String numid;
-
+    private String image;
     public String getTitle() {
         return title;
     }
@@ -19,5 +19,9 @@ public class Notification {
 
     public String getID() {
         return numid;
+    }
+
+    public String getImage(){
+        return image;
     }
 }

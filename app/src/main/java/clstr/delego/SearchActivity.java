@@ -1,6 +1,7 @@
 package clstr.delego;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.design.widget.FloatingActionButton;
@@ -83,8 +84,9 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
     protected void getData(String text, int position) {
         mListView = (ListView) findViewById(R.id.list_view_search);
         mListView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
-        final String query = URL + text;
-        new LoadJSONTask((LoadJSONTask.Listener) this).execute(query);
+        String query = URL + text;
+        query = query.replaceAll(" ", "%20");
+        new LoadJSONTask((LoadJSONTask.Listener) this).execute(String.valueOf(query));
 
         Toast.makeText(getApplicationContext(), text + ", position: " + position, Toast.LENGTH_SHORT).show();
     }
