@@ -1,15 +1,11 @@
 package clstr.delego;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,13 +15,10 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.afollestad.json.Ason;
-import com.afollestad.json.AsonArray;
 import com.apptakk.http_request.HttpRequest;
 import com.apptakk.http_request.HttpRequestTask;
 import com.apptakk.http_request.HttpResponse;
 import com.lapism.searchview.SearchAdapter;
-import com.lapism.searchview.SearchFilter;
 import com.lapism.searchview.SearchHistoryTable;
 import com.lapism.searchview.SearchItem;
 import com.lapism.searchview.SearchView;
@@ -41,19 +34,16 @@ import clstr.delego.models.Delegate;
 
 public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Listener, AdapterView.OnItemClickListener{
 
-    protected SearchView mSearchView = null;
-    private SearchHistoryTable mHistoryDatabase;
-    private ListView mListView;
-
     public static final String URL = Constants.WEB_SERVER + "search_delegate/";
-
-    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
-
     private static final String KEY_COMMITTEE = "committee";
     private static final String KEY_NAME = "name";
     private static final String KEY_IMAGE = "country";
     private static final String KEY_USERID = "numid";
     private static final String KEY_IDENTIFIER = "identifier";
+    protected SearchView mSearchView = null;
+    private SearchHistoryTable mHistoryDatabase;
+    private ListView mListView;
+    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,12 +73,12 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
     @CallSuper
     protected void getData(String text, int position) {
         mListView = (ListView) findViewById(R.id.list_view_search);
-        mListView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
+        mListView.setOnItemClickListener(this);
         String query = URL + text;
         query = query.replaceAll(" ", "%20");
-        new LoadJSONTask((LoadJSONTask.Listener) this).execute(String.valueOf(query));
+        new LoadJSONTask(this).execute(String.valueOf(query));
 
-        Toast.makeText(getApplicationContext(), text + ", position: " + position, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getApplicationContext(), text + ", position: " + position, Toast.LENGTH_SHORT).show();
     }
     @Override
     public void onLoaded(List<Delegate> androidList) {
@@ -124,7 +114,7 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
         sendStuff.putExtra("user_arrival", arrival_URI);
         startActivity(sendStuff);
 
-        Toast.makeText(this, mAndroidMapList.get(i).get(KEY_NAME),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, mAndroidMapList.get(i).get(KEY_NAME),Toast.LENGTH_SHORT).show();
 
     }
 

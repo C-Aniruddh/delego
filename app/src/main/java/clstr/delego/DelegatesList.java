@@ -1,29 +1,25 @@
 package clstr.delego;
 
 import android.content.Intent;
-import android.support.design.widget.TabLayout;
+import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -105,21 +101,18 @@ public class DelegatesList extends AppCompatActivity  {
      * A placeholder fragment containing a simple view.
      */
     public static class PlaceholderFragment extends Fragment implements LoadJSONTask.Listener, AdapterView.OnItemClickListener {
+        public static final String URL = Constants.WEB_SERVER + "user_sort/";
         /**
          * The fragment argument representing the section number for this
          * fragment.
          */
         private static final String ARG_SECTION_NUMBER = "section_number";
-        private ListView mListView;
-
-        public static final String URL = Constants.WEB_SERVER + "user_sort/";
-
-        private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
-
         private static final String KEY_TYPE = "Role";
         private static final String KEY_NAME = "Name";
         private static final String KEY_IMAGE = "Committee";
         private static final String KEY_USERID = "identifier";
+        private ListView mListView;
+        private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
 
         public PlaceholderFragment() {
         }
@@ -179,7 +172,7 @@ public class DelegatesList extends AppCompatActivity  {
             sendStuff.putExtra("user_arrival", arrival_URI);
             startActivity(sendStuff);
 
-            Toast.makeText(getActivity(), mAndroidMapList.get(i).get(KEY_NAME),Toast.LENGTH_SHORT).show();
+            //Toast.makeText(getActivity(), mAndroidMapList.get(i).get(KEY_NAME),Toast.LENGTH_SHORT).show();
         }
 
         @Override

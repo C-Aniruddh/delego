@@ -1,30 +1,25 @@
 package clstr.delego;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.annotation.TargetApi;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.app.LoaderManager.LoaderCallbacks;
-
-import android.content.CursorLoader;
-import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-
 import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,9 +30,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.afollestad.json.Ason;
-import com.apptakk.http_request.HttpResponse;
 
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -51,13 +43,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -100,6 +88,41 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
         SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
         String status = "";
         status = prefs.getString("user_status", "false");//"No name defined" is the default value.
+
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  Initialize SharedPreferences
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+
+                //  Create a new boolean and preference and set it to true
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+                //  If the activity has never started before...
+                if (isFirstStart) {
+
+                    //  Launch app intro
+                    Intent i = new Intent(LoginActivity.this, SetupActivity.class);
+                    startActivity(i);
+
+                    //  Make a new preferences editor
+                    SharedPreferences.Editor e = getPrefs.edit();
+
+                    //  Edit preference to make it false because we don't want this to run again
+                    e.putBoolean("firstStart", false);
+
+                    //  Apply changes
+                    e.apply();
+                } else {
+
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
+
         if (status.equals("true")){
             Intent openMain = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(openMain);
@@ -110,7 +133,6 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
-
 
         mPasswordView = (EditText) findViewById(R.id.password);
         mPasswordView.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -411,8 +433,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Toast q = Toast.makeText(LoginActivity.this, login_status, Toast.LENGTH_SHORT);
                     q.show();
                     if (login_status.equals("success")) {
-                        Toast toast = Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT);
-                        toast.show();
+                        //Toast toast = Toast.makeText(LoginActivity.this, "Logged in", Toast.LENGTH_SHORT);
+                        //toast.show();
                         String email_id = responseJSON.getString("email");
                         String username = responseJSON.getString("username");
                         String type = responseJSON.getString("type");

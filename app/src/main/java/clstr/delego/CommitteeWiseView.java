@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -24,17 +23,14 @@ import clstr.delego.models.Delegate;
 
 public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask.Listener, AdapterView.OnItemClickListener  {
 
-    private ListView mListView;
-
     public static final String URL = Constants.WEB_SERVER+ "by_committee/";
-
-    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
-
     private static final String KEY_COMMITTEE = "committee";
     private static final String KEY_NAME = "name";
     private static final String KEY_IMAGE = "country";
     private static final String KEY_USERID = "numid";
     private static final String KEY_IDENTIFIER = "identifier";
+    private ListView mListView;
+    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,7 +167,7 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         final String user_id = mAndroidMapList.get(i).get(KEY_IDENTIFIER);
-        Toast.makeText(this, "User ID : " + user_id, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "User ID : " + user_id, Toast.LENGTH_SHORT).show();
         final String process_URI = Constants.WEB_SERVER + "user_details/" + user_id;
         final String arrival_URI = Constants.WEB_SERVER +"user_arrival/" + user_id;
         Intent sendStuff = new Intent(CommitteeWiseView.this, UserCheckin.class);
@@ -186,7 +182,7 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
         ListAdapter adapter = new SimpleAdapter(CommitteeWiseView.this, mAndroidMapList, R.layout.all_users_listitem,
                 new String[] { KEY_COMMITTEE, KEY_NAME},
                 new int[] { R.id.user_type_View, R.id.user_name_View});
-        Toast.makeText(this, "InsideLoad List View", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "InsideLoad List View", Toast.LENGTH_SHORT).show();
         mListView.setAdapter(adapter);
 
     }

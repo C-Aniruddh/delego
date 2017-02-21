@@ -1,18 +1,14 @@
 package clstr.delego;
 
 import android.Manifest;
+import android.content.Intent;
 import android.graphics.Color;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
 
 import com.github.paolorotolo.appintro.AppIntro;
-import com.github.paolorotolo.appintro.AppIntro2;
-import com.github.paolorotolo.appintro.AppIntroFragment;
 
 import clstr.delego.fragments.SlideFive;
 import clstr.delego.fragments.SlideFour;
@@ -36,10 +32,9 @@ public class SetupActivity extends AppIntro {
         addSlide(SlideThree.newInstance(R.layout.slide_three));
         addSlide(SlideFour.newInstance(R.layout.slide_four));
         addSlide(SlideFive.newInstance(R.layout.slide_five));
-        addSlide(AppIntroFragment.newInstance("Permission Request", "In order for the app to run, we require some permissions!", R.drawable.switch_d, Color.parseColor("#1976D2")));
-        askForPermissions(new String[]{Manifest.permission.CAMERA}, 6);
-        askForPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 6);
-        askForPermissions(new String[]{Manifest.permission.CALL_PHONE}, 6);
+        askForPermissions(new String[]{Manifest.permission.CAMERA}, 2);
+        askForPermissions(new String[]{Manifest.permission.READ_CONTACTS}, 3);
+        askForPermissions(new String[]{Manifest.permission.CALL_PHONE}, 4);
         //setBarColor(Color.parseColor("#2f4779"));
         setIndicatorColor(Color.parseColor("#2f4779"), Color.parseColor("#2f4779"));
 
@@ -57,6 +52,7 @@ public class SetupActivity extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-        finish();
+        Intent login = new Intent(SetupActivity.this, MainActivity.class);
+        startActivity(login);
     }
 }

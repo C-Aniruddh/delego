@@ -3,12 +3,9 @@ package clstr.delego;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.util.Log;
-import android.view.View;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
@@ -29,29 +27,22 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import clstr.delego.models.Delegate;
 import clstr.delego.models.Notification;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, LoadJSONTaskNotifications.Listener, AdapterView.OnItemClickListener {
 
-    private SearchHistoryTable mHistoryDatabase;
-    private NavigationView mNavigation;
-    private View mHeaderView;
-
-    private TextView mDrawerHeaderTitle;
-    private TextView mDrawerHeaderEmail;
-
-    private ListView mListView;
-
-    public static final String URL = Constants.WEB_SERVER+ "notifications";
-
-    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
-
+    public static final String URL = Constants.WEB_SERVER + "notifications";
     private static final String KEY_TITLE = "title";
     private static final String KEY_CONTENT = "content";
     private static final String KEY_IMAGE = "image";
-
+    private SearchHistoryTable mHistoryDatabase;
+    private NavigationView mNavigation;
+    private View mHeaderView;
+    private TextView mDrawerHeaderTitle;
+    private TextView mDrawerHeaderEmail;
+    private ListView mListView;
+    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
     private String user_type;
     private String name;
     private String email;
@@ -77,52 +68,23 @@ public class MainActivity extends AppCompatActivity
             }
         });
         mListView = (ListView) findViewById(R.id.list_view_notifications);
-        mListView.setOnItemClickListener((AdapterView.OnItemClickListener) this);
-        new LoadJSONTaskNotifications((LoadJSONTaskNotifications.Listener) this).execute(URL);
-
-        //  Declare a new thread to do a preference check
-        Thread t = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                //  Initialize SharedPreferences
-                SharedPreferences getPrefs = PreferenceManager
-                        .getDefaultSharedPreferences(getBaseContext());
-
-                //  Create a new boolean and preference and set it to true
-                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
-
-                //  If the activity has never started before...
-                if (isFirstStart) {
-
-                    //  Launch app intro
-                    Intent i = new Intent(MainActivity.this, SetupActivity.class);
-                    startActivity(i);
-
-                    //  Make a new preferences editor
-                    SharedPreferences.Editor e = getPrefs.edit();
-
-                    //  Edit preference to make it false because we don't want this to run again
-                    e.putBoolean("firstStart", false);
-
-                    //  Apply changes
-                    e.apply();
-                }
-            }
-        });
-
-        // Start the thread
-        t.start();
-
-
+        mListView.setOnItemClickListener(this);
+        new LoadJSONTaskNotifications(this).execute(URL);
         SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
         String status = "";
         status = prefs.getString("user_status", "false");//"No name defined" is the default value.
         name = prefs.getString("fullname", "Delego");
         email = prefs.getString("email_id", "delego@clstr.tech");
         user_type = prefs.getString("type", "user");
-        Toast toast = Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT);
-        toast.show();
-        if (status.equals("false")) {
+
+        //  Declare a new thread to do a preference check
+        final String finalStatus = status;
+
+
+        //Toast toast = Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT);
+        //toast.show();
+
+        if (finalStatus.equals("false")) {
             Intent login = new Intent(MainActivity.this, LoginActivity.class);
             startActivity(login);
         } else {
@@ -143,7 +105,7 @@ public class MainActivity extends AppCompatActivity
         Menu menu = navigationView.getMenu();
 
         if (user_type.equals("owner")){
-            menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.ic_menu_camera);
+            menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
             menu.add(R.id.menu_item, 2, 200, "All members").setIcon(R.drawable.account_multiple);
             menu.add(R.id.menu_item, 3, 300, "Search").setIcon(R.drawable.account_search);
             menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
@@ -151,9 +113,9 @@ public class MainActivity extends AppCompatActivity
             menu.setGroupCheckable(R.id.menu_item, true, true);
             menu.setGroupVisible(R.id.menu_item, true);
         } else if(user_type.equals("user")){
-            menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.ic_menu_camera);
+            menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
             menu.add(R.id.menu_item, 2, 200, "Profile").setIcon(R.drawable.account_multiple);
-            menu.add(R.id.menu_item, 3, 300, "Schedule").setIcon(R.drawable.ic_menu_camera);
+            menu.add(R.id.menu_item, 3, 300, "Schedule").setIcon(R.drawable.timetable);
             menu.add(R.id.menu_item, 4, 400, "About Mun").setIcon(R.drawable.alert_circle);
             menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
             menu.setGroupCheckable(R.id.menu_item, true, true);
@@ -180,7 +142,7 @@ public class MainActivity extends AppCompatActivity
 
             map.put(KEY_TITLE, android.getTitle());
             map.put(KEY_CONTENT, android.getContent());
-            Toast.makeText(this, map.toString(), Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, map.toString(), Toast.LENGTH_SHORT).show();
             mAndroidMapList.add(map);
 
         }
@@ -212,7 +174,7 @@ public class MainActivity extends AppCompatActivity
         ListAdapter adapter = new SimpleAdapter(MainActivity.this, mAndroidMapList, R.layout.notifications_list_item,
                 new String[] { KEY_TITLE, KEY_CONTENT},
                 new int[] { R.id.notificationTitleView, R.id.notificationContentView});
-        Toast.makeText(this, "InsideLoad List View", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, "InsideLoad List View", Toast.LENGTH_SHORT).show();
         mListView.setAdapter(adapter);
 
     }
