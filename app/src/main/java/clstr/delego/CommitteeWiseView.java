@@ -1,6 +1,7 @@
 package clstr.delego;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -42,6 +43,9 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
         ImageView image = (ImageView) findViewById(R.id.ViewImage);
         // get intent data
         Intent i = getIntent();
+        SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String type = "";
+        type = prefs.getString("type", "owner");
 
         // Selected image id
         int position = i.getExtras().getInt("id");
@@ -123,9 +127,6 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
             String final_uri = URL + "UNEA";
             collapsibleToolbar.setTitle("UNEA");
             image.setImageResource(R.drawable.unea);
-            mListView = (ListView) findViewById(R.id.list_view_commwise);
-            mListView.setOnItemClickListener(this);
-            new LoadJSONTask(this).execute(final_uri);
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -171,10 +172,14 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
         final String process_URI = Constants.WEB_SERVER + "user_details/" + user_id;
         final String arrival_URI = Constants.WEB_SERVER +"user_arrival/" + user_id;
         final String attendance_URI = Constants.WEB_SERVER + "attendance/" + user_id + "&";
+        final String formals_URI = Constants.WEB_SERVER + "formals/" + user_id + "&";
+        final String informals_URI = Constants.WEB_SERVER + "informals/" + user_id + "&";
         Intent sendStuff = new Intent(CommitteeWiseView.this, UserCheckin.class);
         sendStuff.putExtra("user_attendance", attendance_URI);
         sendStuff.putExtra("key", process_URI);
         sendStuff.putExtra("user_arrival", arrival_URI);
+        sendStuff.putExtra("user_formals", formals_URI);
+        sendStuff.putExtra("user_informals", informals_URI);
         startActivity(sendStuff);
 
     }

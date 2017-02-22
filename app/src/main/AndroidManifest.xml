@@ -70,6 +70,10 @@
             android:name=".CommitteeWiseView"
             android:label="@string/title_activity_committee_wise_view"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".MyCommitteeView"
+            android:label="@string/title_activity_committee_wise_view"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".SetupActivity" />
         <!--
  ATTENTION: This was auto-generated to add Google Play services to your project for

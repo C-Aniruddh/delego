@@ -109,9 +109,11 @@ public class SearchActivity extends AppCompatActivity implements LoadJSONTask.Li
         final String user_id = mAndroidMapList.get(i).get(KEY_IDENTIFIER);
         final String process_URI = Constants.WEB_SERVER + "user_details/" + user_id;
         final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + user_id;
+        final String attendance_URI = Constants.WEB_SERVER + "attendance/" + user_id + "&";
         Intent sendStuff = new Intent(SearchActivity.this, UserCheckin.class);
         sendStuff.putExtra("key", process_URI);
         sendStuff.putExtra("user_arrival", arrival_URI);
+        sendStuff.putExtra("user_attendance", attendance_URI);
         startActivity(sendStuff);
 
         //Toast.makeText(this, mAndroidMapList.get(i).get(KEY_NAME),Toast.LENGTH_SHORT).show();

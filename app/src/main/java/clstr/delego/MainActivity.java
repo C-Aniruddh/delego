@@ -116,6 +116,14 @@ public class MainActivity extends AppCompatActivity
             menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
             menu.setGroupCheckable(R.id.menu_item, true, true);
             menu.setGroupVisible(R.id.menu_item, true);
+        } else if (user_type.equals("host")) {
+            menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
+            menu.add(R.id.menu_item, 2, 200, "My Committee").setIcon(R.drawable.account_multiple);
+            menu.add(R.id.menu_item, 3, 300, "Search").setIcon(R.drawable.account_search);
+            menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
+            menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
+            menu.setGroupCheckable(R.id.menu_item, true, true);
+            menu.setGroupVisible(R.id.menu_item, true);
         } else if(user_type.equals("user")){
             menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
             menu.add(R.id.menu_item, 2, 200, "Profile").setIcon(R.drawable.account_multiple);
@@ -126,7 +134,7 @@ public class MainActivity extends AppCompatActivity
             menu.setGroupVisible(R.id.menu_item, true);
         } else if (user_type.equals("rapporteur")) {
             menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
-            menu.add(R.id.menu_item, 2, 200, "All members").setIcon(R.drawable.account_multiple);
+            menu.add(R.id.menu_item, 2, 200, "My Committee").setIcon(R.drawable.account_multiple);
             menu.add(R.id.menu_item, 3, 300, "Search").setIcon(R.drawable.account_search);
             menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
             menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
@@ -252,13 +260,34 @@ public class MainActivity extends AppCompatActivity
                 Intent restart = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(restart);
             }
+        } else if (user_type.equals("host")) {
+            if (id == 1) {
+                Intent qr_scan = new Intent(MainActivity.this, QRScanActivity.class);
+                startActivity(qr_scan);
+                // Handle the camera action
+            } else if (id == 2) {
+                Intent all_members = new Intent(MainActivity.this, MyCommitteeView.class);
+                startActivity(all_members);
+            } else if (id == 3) {
+                Intent search = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(search);
+            } else if (id == 4) {
+                Intent addNew = new Intent(MainActivity.this, AddDelegate.class);
+                startActivity(addNew);
+            } else if (id == 5) {
+                SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
+                editor.putString("user_status", "false");
+                editor.commit();
+                Intent restart = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(restart);
+            }
         } else if (user_type.equals("rapporteur")) {
             if (id == 1) {
                 Intent qr_scan = new Intent(MainActivity.this, QRScanActivity.class);
                 startActivity(qr_scan);
                 // Handle the camera action
             } else if (id == 2) {
-                Intent all_members = new Intent(MainActivity.this, DelegateSortView.class);
+                Intent all_members = new Intent(MainActivity.this, MyCommitteeView.class);
                 startActivity(all_members);
             } else if (id == 3) {
                 Intent search = new Intent(MainActivity.this, SearchActivity.class);

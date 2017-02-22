@@ -155,4 +155,6 @@
     <string name="notif_title">Notifcation Title</string>
     <string name="attendance">Attendance</string>
     <string name="attendance1">Attendance</string>
+    <string name="rsvp">RSVP</string>
+    <string name="arrived">Arrived</string>
 </resources>

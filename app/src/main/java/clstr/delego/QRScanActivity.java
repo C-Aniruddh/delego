@@ -44,7 +44,25 @@ public class QRScanActivity extends AppCompatActivity {
                     Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
                     sendStuff.putExtra("key", process_URI);
                     sendStuff.putExtra("user_arrival", arrival_URI);
+                    final String formals_URI = Constants.WEB_SERVER + "formals/" + data + "&";
+                    final String informals_URI = Constants.WEB_SERVER + "informals/" + data + "&";
                     sendStuff.putExtra("type", finalType);
+                    sendStuff.putExtra("user_formals", formals_URI);
+                    sendStuff.putExtra("user_informals", informals_URI);
+                    startActivity(sendStuff);
+                } else if (finalType.equals("host")) {
+                    Log.d("QR", "Value : " + data);
+                    final String process_URI = Constants.WEB_SERVER + "user_details/" + data;
+                    flag = 1;
+                    final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + data;
+                    final String formals_URI = Constants.WEB_SERVER + "formals/" + data + "&";
+                    final String informals_URI = Constants.WEB_SERVER + "informals/" + data + "&";
+                    Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
+                    sendStuff.putExtra("key", process_URI);
+                    sendStuff.putExtra("user_arrival", arrival_URI);
+                    sendStuff.putExtra("type", finalType);
+                    sendStuff.putExtra("user_formals", formals_URI);
+                    sendStuff.putExtra("user_informals", informals_URI);
                     startActivity(sendStuff);
                 } else if (finalType.equals("rapporteur")) {
                     Log.d("QR", "Value : " + data);
