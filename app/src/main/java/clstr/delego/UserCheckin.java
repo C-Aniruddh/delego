@@ -2,47 +2,42 @@ package clstr.delego;
 
 import android.Manifest;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.afollestad.json.Ason;
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.apptakk.http_request.HttpRequest;
 import com.apptakk.http_request.HttpRequestTask;
 import com.apptakk.http_request.HttpResponse;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.SimpleTarget;
+import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
+import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.klinker.android.sliding.MultiShrinkScroller;
 import com.klinker.android.sliding.SlidingActivity;
-import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
-import com.nostra13.universalimageloader.core.ImageLoader;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 
 import butterknife.Bind;
-import butterknife.OnClick;
-import clstr.delego.helpers.IntentHelper;
 
 public class UserCheckin extends SlidingActivity {
 
     public String user_email = "";
     public String user_phone = "";
+    public String attendance_URI;
 
     @Bind(R.id.phone_viewgroup)
     CardView phoneView;
@@ -52,30 +47,141 @@ public class UserCheckin extends SlidingActivity {
         public void onClick(View v) {
             Bundle b = getIntent().getExtras();
             String arrival_URI = b.getString("user_arrival");
-            new HttpRequestTask(
-                    new HttpRequest(arrival_URI, HttpRequest.GET),
-                    new HttpRequest.Handler() {
+            SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+            String type;
+            type = prefs.getString("type", "owner");
 
-                        @Override
-                        public void response(HttpResponse response) {
-                            if (response.code == 200) {
-                                String server_response = "The delegate has arrived!";
-                                Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
-                                FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
-                                fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+            attendance_URI = b.getString("user_attendance");
+            if (type.equals("owner")) {
+                new HttpRequestTask(
+                        new HttpRequest(arrival_URI, HttpRequest.GET),
+                        new HttpRequest.Handler() {
+
+                            @Override
+                            public void response(HttpResponse response) {
+                                if (response.code == 200) {
+                                    String server_response = "The delegate has arrived!";
+                                    Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                    FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                    fab.setBackgroundColor(Color.parseColor("#2E7D32"));
 
 
-                            } else {
-                                String server_response = "Can't reach the server at the moment. Please try again later.";
-                                Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                        .setAction("Action", null).show();
+                                } else {
+                                    String server_response = "Can't reach the server at the moment. Please try again later.";
+                                    Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                            .setAction("Action", null).show();
+                                }
                             }
-                        }
-                    }).execute();
+                        }).execute();
+            } else if (type.equals("rapporteur")) {
+                makeAttendanceDialog();
+            }
 
         }
     };
+
+    public void makeAttendanceDialog() {
+        new MaterialStyledDialog.Builder(this)
+                .setTitle("Set Attendance")
+                .setDescription("Is the delegate present and voting, present or absent?")
+                .setHeaderColor(R.color.dialog_header)
+                .setStyle(Style.HEADER_WITH_TITLE)
+                .setPositiveText("Present and Voting")
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    String final_attendance = attendance_URI + "Present%20And%20Voting";
+
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new HttpRequestTask(
+                                new HttpRequest(final_attendance, HttpRequest.GET),
+                                new HttpRequest.Handler() {
+
+                                    @Override
+                                    public void response(HttpResponse response) {
+                                        if (response.code == 200) {
+                                            String server_response = "The delegate is Present and Voting";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+                                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                                            attendance.setText("Present and Voting");
+
+
+                                        } else {
+                                            String server_response = "Can't reach the server at the moment. Please try again later.";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                        }
+                                    }
+                                }).execute();
+                    }
+                })
+                .setNegativeText("Present")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    String final_attendance = attendance_URI + "Present";
+
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new HttpRequestTask(
+                                new HttpRequest(final_attendance, HttpRequest.GET),
+                                new HttpRequest.Handler() {
+
+                                    @Override
+                                    public void response(HttpResponse response) {
+                                        if (response.code == 200) {
+                                            String server_response = "The delegate has been marked Present";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+
+                                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                                            attendance.setText("Present");
+
+                                        } else {
+                                            String server_response = "Can't reach the server at the moment. Please try again later.";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                        }
+                                    }
+                                }).execute();
+                    }
+                })
+                .setNeutralText("Absent")
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    String final_attendance = attendance_URI + "Absent";
+
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new HttpRequestTask(
+                                new HttpRequest(final_attendance, HttpRequest.GET),
+                                new HttpRequest.Handler() {
+
+                                    @Override
+                                    public void response(HttpResponse response) {
+                                        if (response.code == 200) {
+                                            String server_response = "The delegate has been marked Absent";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+                                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                                            attendance.setText("Absent");
+                                        } else {
+                                            String server_response = "Can't reach the server at the moment. Please try again later.";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                        }
+                                    }
+                                }).execute();
+                    }
+                })
+                //.setCancelable(true)
+                .setScrollable(true)
+                .show();
+    }
 
     @Override
     public void init(Bundle savedInstanceState) {
@@ -83,7 +189,6 @@ public class UserCheckin extends SlidingActivity {
         String process_URI = b.getString("key");
         enableFullscreen();
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.check, userArrival);
-
         new HttpRequestTask(
                 new HttpRequest(process_URI, HttpRequest.GET),
                 new HttpRequest.Handler() {
@@ -100,6 +205,9 @@ public class UserCheckin extends SlidingActivity {
                             String user_committee = ason.getString("Committee");
                             TextView committee = (TextView) findViewById(R.id.committeeView);
                             committee.setText(user_committee);
+                            String current_attendance = ason.getString("attendance");
+                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                            attendance.setText(current_attendance);
                             String user_type = ason.getString("Country");
                             TextView type = (TextView) findViewById(R.id.countryView);
                             type.setText(user_type);

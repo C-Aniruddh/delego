@@ -2,13 +2,11 @@ package clstr.delego;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.SurfaceView;
 import android.view.View;
-import android.widget.TextView;
-
 
 import github.nisrulz.qreader.QRDataListener;
 import github.nisrulz.qreader.QREader;
@@ -46,7 +44,21 @@ public class QRScanActivity extends AppCompatActivity {
                     Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
                     sendStuff.putExtra("key", process_URI);
                     sendStuff.putExtra("user_arrival", arrival_URI);
+                    sendStuff.putExtra("type", finalType);
                     startActivity(sendStuff);
+                } else if (finalType.equals("rapporteur")) {
+                    Log.d("QR", "Value : " + data);
+                    final String process_URI = Constants.WEB_SERVER + "user_details/" + data;
+                    flag = 1;
+                    final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + data;
+                    final String attendance_URI = Constants.WEB_SERVER + "attendance/" + data + "&";
+                    Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
+                    sendStuff.putExtra("key", process_URI);
+                    sendStuff.putExtra("user_arrival", arrival_URI);
+                    sendStuff.putExtra("type", finalType);
+                    sendStuff.putExtra("user_attendance", attendance_URI);
+                    startActivity(sendStuff);
+
                 } else {
                     Log.d("QR", "Value : " + data);
                     final String process_URI = Constants.WEB_SERVER + "user_details/" + data;

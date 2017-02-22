@@ -153,4 +153,6 @@
     <string name="title">Title</string>
     <string name="content">Content</string>
     <string name="notif_title">Notifcation Title</string>
+    <string name="attendance">Attendance</string>
+    <string name="attendance1">Attendance</string>
 </resources>

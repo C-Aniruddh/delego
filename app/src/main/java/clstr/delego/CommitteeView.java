@@ -21,17 +21,14 @@ import clstr.delego.models.Delegate;
 
 public class CommitteeView extends AppCompatActivity implements LoadJSONTask.Listener, AdapterView.OnItemClickListener {
 
-    private ListView mListView;
-
     public static final String URL = Constants.WEB_SERVER+ "by_committee/" + "UNHRC";
-
-    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
-
     private static final String KEY_COMMITTEE = "committee";
     private static final String KEY_NAME = "name";
     private static final String KEY_IMAGE = "country";
     private static final String KEY_USERID = "numid";
     private static final String KEY_IDENTIFIER = "identifier";
+    private ListView mListView;
+    private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +67,8 @@ public class CommitteeView extends AppCompatActivity implements LoadJSONTask.Lis
             mAndroidMapList.add(map);
 
         }
+
+
         loadListView();
     }
 

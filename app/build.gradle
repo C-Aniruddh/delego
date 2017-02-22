@@ -45,5 +45,6 @@ dependencies {
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
     compile 'com.github.clans:fab:1.6.4'
+    compile 'com.github.javiersantos:MaterialStyledDialogs:2.1'
     testCompile 'junit:junit:4.12'
 }

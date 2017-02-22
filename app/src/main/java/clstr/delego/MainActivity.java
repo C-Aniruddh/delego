@@ -3,7 +3,6 @@ package clstr.delego;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
@@ -16,7 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -76,7 +74,7 @@ public class MainActivity extends AppCompatActivity
         final String finalStatus = status;
 
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
-        swipeRefreshLayout.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) this);
+        swipeRefreshLayout.setOnRefreshListener(this);
         /*swipeRefreshLayout.post(new Runnable() {
                                     @Override
                                     public void run() {
@@ -126,6 +124,15 @@ public class MainActivity extends AppCompatActivity
             menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
             menu.setGroupCheckable(R.id.menu_item, true, true);
             menu.setGroupVisible(R.id.menu_item, true);
+        } else if (user_type.equals("rapporteur")) {
+            menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
+            menu.add(R.id.menu_item, 2, 200, "All members").setIcon(R.drawable.account_multiple);
+            menu.add(R.id.menu_item, 3, 300, "Search").setIcon(R.drawable.account_search);
+            menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
+            menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
+            menu.setGroupCheckable(R.id.menu_item, true, true);
+            menu.setGroupVisible(R.id.menu_item, true);
+
         }
     }
 
@@ -245,7 +252,28 @@ public class MainActivity extends AppCompatActivity
                 Intent restart = new Intent(MainActivity.this, MainActivity.class);
                 startActivity(restart);
             }
-        } else if (user_type.equals("user")){
+        } else if (user_type.equals("rapporteur")) {
+            if (id == 1) {
+                Intent qr_scan = new Intent(MainActivity.this, QRScanActivity.class);
+                startActivity(qr_scan);
+                // Handle the camera action
+            } else if (id == 2) {
+                Intent all_members = new Intent(MainActivity.this, DelegateSortView.class);
+                startActivity(all_members);
+            } else if (id == 3) {
+                Intent search = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(search);
+            } else if (id == 4) {
+                Intent addNew = new Intent(MainActivity.this, AddDelegate.class);
+                startActivity(addNew);
+            } else if (id == 5) {
+                SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
+                editor.putString("user_status", "false");
+                editor.commit();
+                Intent restart = new Intent(MainActivity.this, MainActivity.class);
+                startActivity(restart);
+            }
+        } else if (user_type.equals("user")) {
             if (id == 1) {
                 Intent qr_scan = new Intent(MainActivity.this, QRScanActivity.class);
                 startActivity(qr_scan);

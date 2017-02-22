@@ -3,4 +3,5 @@
     <color name="colorPrimary">#3b5998</color>
     <color name="colorPrimaryDark">#2f4779</color>
     <color name="colorAccent">#FFF</color>
+    <color name="dialog_header">#424242</color>
 </resources>
