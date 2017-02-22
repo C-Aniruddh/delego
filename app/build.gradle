@@ -44,5 +44,6 @@ dependencies {
     compile 'com.lapism:searchview:4.0'
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.github.paolorotolo:appintro:4.1.0'
+    compile 'com.github.clans:fab:1.6.4'
     testCompile 'junit:junit:4.12'
 }

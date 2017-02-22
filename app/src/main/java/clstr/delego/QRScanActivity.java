@@ -33,7 +33,6 @@ public class QRScanActivity extends AppCompatActivity {
         String type = "";
         type = prefs.getString("type", "owner");
         mySurfaceView = (SurfaceView) findViewById(R.id.camera_view);
-
         final String finalType = type;
         qrEader = new QREader.Builder(this, mySurfaceView, new QRDataListener() {
 

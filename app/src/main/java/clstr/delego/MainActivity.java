@@ -8,6 +8,7 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
@@ -30,7 +32,7 @@ import java.util.List;
 import clstr.delego.models.Notification;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, LoadJSONTaskNotifications.Listener, AdapterView.OnItemClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, LoadJSONTaskNotifications.Listener, AdapterView.OnItemClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     public static final String URL = Constants.WEB_SERVER + "notifications";
     private static final String KEY_TITLE = "title";
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity
     private TextView mDrawerHeaderTitle;
     private TextView mDrawerHeaderEmail;
     private ListView mListView;
+    private SwipeRefreshLayout swipeRefreshLayout;
     private List<HashMap<String, String>> mAndroidMapList = new ArrayList<>();
     private String user_type;
     private String name;
@@ -59,14 +62,6 @@ public class MainActivity extends AppCompatActivity
         mDrawerHeaderTitle = (TextView) mHeaderView.findViewById(R.id.userFullname);
         mDrawerHeaderEmail = (TextView) mHeaderView.findViewById(R.id.userEmail);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         mListView = (ListView) findViewById(R.id.list_view_notifications);
         mListView.setOnItemClickListener(this);
         new LoadJSONTaskNotifications(this).execute(URL);
@@ -80,6 +75,17 @@ public class MainActivity extends AppCompatActivity
         //  Declare a new thread to do a preference check
         final String finalStatus = status;
 
+        swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe_refresh_layout);
+        swipeRefreshLayout.setOnRefreshListener((SwipeRefreshLayout.OnRefreshListener) this);
+        /*swipeRefreshLayout.post(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        swipeRefreshLayout.setRefreshing(true);
+
+                                        refreshAction();
+                                    }
+                                }
+        );*/
 
         //Toast toast = Toast.makeText(MainActivity.this, name, Toast.LENGTH_SHORT);
         //toast.show();
@@ -125,12 +131,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        /*DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
-        }
+        }*/
     }
 
     @Override
@@ -150,10 +156,21 @@ public class MainActivity extends AppCompatActivity
         loadListView();
     }
 
+    public void onRefresh(){
+        refreshAction();
+    }
+    public void refreshAction(){
+        mAndroidMapList.clear();
+        mListView.deferNotifyDataSetChanged();
+        mListView.setOnItemClickListener(this);
+        new LoadJSONTaskNotifications(this).execute(URL);
+    }
+
     @Override
     public void onError() {
 
         Toast.makeText(this, "Error !", Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
@@ -176,7 +193,7 @@ public class MainActivity extends AppCompatActivity
                 new int[] { R.id.notificationTitleView, R.id.notificationContentView});
         //Toast.makeText(this, "InsideLoad List View", Toast.LENGTH_SHORT).show();
         mListView.setAdapter(adapter);
-
+        swipeRefreshLayout.setRefreshing(false);
     }
 
     @Override
