@@ -48,6 +48,7 @@ public class UserCheckin extends SlidingActivity {
     CardView phoneView;
     @Bind(R.id.email_viewgroup)
     CardView emailView;
+
     private View.OnClickListener userArrival = new View.OnClickListener() {
         public void onClick(View v) {
             Bundle b = getIntent().getExtras();
@@ -56,7 +57,7 @@ public class UserCheckin extends SlidingActivity {
             String type;
             type = prefs.getString("type", "owner");
             String committee = prefs.getString("user_committee", "None");
-            if (committee.equals(user_committee)) {
+            if (committee.equals(user_committee) || committee.equals("all")) {
                 attendance_URI = b.getString("user_attendance");
                 if (type.equals("owner") || type.equals("host")) {
                     new HttpRequestTask(
@@ -93,6 +94,18 @@ public class UserCheckin extends SlidingActivity {
         }
     };
 
+    public void startAttendance(View v) {
+        SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String type;
+        type = prefs.getString("type", "owner");
+        String committee = prefs.getString("user_committee", "None");
+
+        if (committee.equals("all") || committee.equals(user_committee)) {
+            if (type.equals("owner") || type.equals("rapporteur")) {
+                makeAttendanceDialog();
+            }
+        }
+    }
     public void makeAttendanceDialog() {
         new MaterialStyledDialog.Builder(this)
                 .setTitle("Set Attendance")
@@ -344,8 +357,8 @@ public class UserCheckin extends SlidingActivity {
         String type;
         type = prefs.getString("type", "owner");
         String committee = prefs.getString("user_committee", "None");
-        if (committee.equals(user_committee)) {
-            if (type.equals("owner") || type.equals("host")) {
+        if (committee.equals("all")) {
+            if (type.equals("owner")) {
                 Bundle b = getIntent().getExtras();
                 formalsURI = b.getString("user_formals");
                 new MaterialStyledDialog.Builder(this)
@@ -456,8 +469,8 @@ public class UserCheckin extends SlidingActivity {
         String type;
         type = prefs.getString("type", "owner");
         String committee = prefs.getString("user_committee", "None");
-        if (committee.equals(user_committee)) {
-            if (type.equals("owner") || type.equals("host")) {
+        if (committee.equals("all")) {
+            if (type.equals("owner")) {
                 Bundle b = getIntent().getExtras();
                 informalsURI = b.getString("user_informals");
                 new MaterialStyledDialog.Builder(this)

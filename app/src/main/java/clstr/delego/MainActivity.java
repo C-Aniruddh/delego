@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -323,11 +322,12 @@ public class MainActivity extends AppCompatActivity
                 profile.putExtra("key", process_URI);
                 startActivity(profile);
             } else if (id == 3){
-                Snackbar.make(getWindow().getDecorView().getRootView(), "Schedule", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent scheduleActivity = new Intent(MainActivity.this, ScheduleActivity.class);
+                startActivity(scheduleActivity);
             } else if (id == 4){
-                Snackbar.make(getWindow().getDecorView().getRootView(), "About", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent aboutActivity = new Intent(MainActivity.this, AboutMun.class);
+                startActivity(aboutActivity);
+
             } else if (id == 5){
                 SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
                 editor.putString("user_status", "false");

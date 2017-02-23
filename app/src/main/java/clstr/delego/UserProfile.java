@@ -129,6 +129,8 @@ public class UserProfile extends SlidingActivity {
                     }
                 }).execute();
         setContent(R.layout.content_user_checkin);
+        CardView informalsCard = (CardView) findViewById(R.id.informals_viewgroup);
+        informalsCard.setVisibility(View.GONE);
         NumberPicker numberPicker = (NumberPicker) findViewById(R.id.number_picker);
         scrollValue = numberPicker.getValue();
         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
@@ -170,6 +172,10 @@ public class UserProfile extends SlidingActivity {
             return;
         }
         startActivity(intent);
+    }
+
+    public void startAttendance(View v) {
+
     }
 
     public void formalsDialog(View v) {
