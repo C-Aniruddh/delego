@@ -30,6 +30,7 @@ import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.klinker.android.sliding.MultiShrinkScroller;
 import com.klinker.android.sliding.SlidingActivity;
+import com.shawnlin.numberpicker.NumberPicker;
 
 import butterknife.Bind;
 
@@ -40,6 +41,8 @@ public class UserProfile extends SlidingActivity {
     public String attendance_URI;
     public String informalsURI;
     public String formalsURI;
+    public int scrollValue;
+
 
     @Bind(R.id.phone_viewgroup)
     CardView phoneView;
@@ -53,6 +56,8 @@ public class UserProfile extends SlidingActivity {
     public void init(Bundle savedInstanceState) {
         Bundle b = getIntent().getExtras();
         String process_URI = b.getString("key");
+        final String current_attendance = b.getString("user_check_attendance");
+        String checkAttendance = current_attendance + "session" + String.valueOf(scrollValue + 1);
         enableFullscreen();
         new HttpRequestTask(
                 new HttpRequest(process_URI, HttpRequest.GET),
@@ -70,9 +75,9 @@ public class UserProfile extends SlidingActivity {
                             String user_committee = ason.getString("Committee");
                             TextView committee = (TextView) findViewById(R.id.committeeView);
                             committee.setText(user_committee);
-                            String current_attendance = ason.getString("attendance");
-                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
-                            attendance.setText(current_attendance);
+                            //String current_attendance = ason.getString("attendance");
+                            //TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                            //attendance.setText(current_attendance);
                             String user_type = ason.getString("Country");
                             TextView type = (TextView) findViewById(R.id.countryView);
                             type.setText(user_type);
@@ -94,6 +99,11 @@ public class UserProfile extends SlidingActivity {
                             String user_informals = ason.getString("informals");
                             TextView informals = (TextView) findViewById(R.id.informalView);
                             informals.setText(user_informals);
+                            String background = ason.getString("background");
+                            if (background.equals("school")) {
+                                CardView informalsCard = (CardView) findViewById(R.id.informals_viewgroup);
+                                informalsCard.setVisibility(View.GONE);
+                            }
                         } else {
                             String ai_response = "Can't reach the server at the moment. Please try again later.";
                             TextView textView = (TextView) findViewById(R.id.idView);
@@ -101,8 +111,50 @@ public class UserProfile extends SlidingActivity {
                         }
                     }
                 }).execute();
-        setContent(R.layout.content_user_checkin);
+        new HttpRequestTask(
+                new HttpRequest(checkAttendance, HttpRequest.GET),
+                new HttpRequest.Handler() {
 
+                    @Override
+                    public void response(HttpResponse response) {
+                        if (response.code == 200) {
+                            Ason ason = new Ason(response.body);
+                            String current_attendance = ason.getString("attendance");
+                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                            attendance.setText(current_attendance);
+
+                        } else {
+                            //String ai_response = "Can't reach the server at the moment. Please try again later.";
+                        }
+                    }
+                }).execute();
+        setContent(R.layout.content_user_checkin);
+        NumberPicker numberPicker = (NumberPicker) findViewById(R.id.number_picker);
+        scrollValue = numberPicker.getValue();
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                scrollValue = newVal;
+                String changeAttendance = current_attendance + "session" + String.valueOf(scrollValue);
+                new HttpRequestTask(
+                        new HttpRequest(changeAttendance, HttpRequest.GET),
+                        new HttpRequest.Handler() {
+
+                            @Override
+                            public void response(HttpResponse response) {
+                                if (response.code == 200) {
+                                    Ason ason = new Ason(response.body);
+                                    String current_attendance = ason.getString("attendance");
+                                    TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                                    attendance.setText(current_attendance);
+
+                                } else {
+                                    String rep_response = "Can't reach the server at the moment. Please try again later.";
+                                }
+                            }
+                        }).execute();
+            }
+        });
     }
 
     public void callUser(View v) {
@@ -152,7 +204,7 @@ public class UserProfile extends SlidingActivity {
                                             fab.setBackgroundColor(Color.parseColor("#2E7D32"));
 
                                             TextView attendance = (TextView) findViewById(R.id.formalsView);
-                                            attendance.setText("Present");
+                                            attendance.setText("Attending");
 
                                         } else {
                                             String server_response = "Can't reach the server at the moment. Please try again later.";
@@ -229,7 +281,7 @@ public class UserProfile extends SlidingActivity {
                                             fab.setBackgroundColor(Color.parseColor("#2E7D32"));
 
                                             TextView attendance = (TextView) findViewById(R.id.informalView);
-                                            attendance.setText("Present");
+                                            attendance.setText("Attending");
 
                                         } else {
                                             String server_response = "Can't reach the server at the moment. Please try again later.";

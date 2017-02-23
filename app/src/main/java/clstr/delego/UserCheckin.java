@@ -30,6 +30,7 @@ import com.github.javiersantos.materialstyleddialogs.MaterialStyledDialog;
 import com.github.javiersantos.materialstyleddialogs.enums.Style;
 import com.klinker.android.sliding.MultiShrinkScroller;
 import com.klinker.android.sliding.SlidingActivity;
+import com.shawnlin.numberpicker.NumberPicker;
 
 import butterknife.Bind;
 
@@ -41,6 +42,7 @@ public class UserCheckin extends SlidingActivity {
     public String user_committee;
     public String formalsURI;
     public String informalsURI;
+    public int scrollValue;
 
     @Bind(R.id.phone_viewgroup)
     CardView phoneView;
@@ -99,7 +101,8 @@ public class UserCheckin extends SlidingActivity {
                 .setStyle(Style.HEADER_WITH_TITLE)
                 .setPositiveText("Present and Voting")
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    String final_attendance = attendance_URI + "Present%20And%20Voting";
+
+                    String final_attendance = attendance_URI + "Present%20And%20Voting" + "&session" + String.valueOf(scrollValue);
 
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -130,7 +133,7 @@ public class UserCheckin extends SlidingActivity {
                 })
                 .setNegativeText("Present")
                 .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    String final_attendance = attendance_URI + "Present";
+                    String final_attendance = attendance_URI + "Present" + "&session" + String.valueOf(scrollValue);
 
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -161,7 +164,7 @@ public class UserCheckin extends SlidingActivity {
                 })
                 .setNeutralText("Absent")
                 .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    String final_attendance = attendance_URI + "Absent";
+                    String final_attendance = attendance_URI + "Absent" + "&session" + String.valueOf(scrollValue);
 
                     @Override
                     public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
@@ -197,14 +200,19 @@ public class UserCheckin extends SlidingActivity {
     public void init(Bundle savedInstanceState) {
         Bundle b = getIntent().getExtras();
         String process_URI = b.getString("key");
+        final String current_attendance = b.getString("user_check_attendance");
+        String checkAttendance = current_attendance + "session" + String.valueOf(scrollValue + 1);
         enableFullscreen();
-        /*SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
-        String background = prefs.getString("user_background", "college");//"No name defined" is the default value.
-        if(background.equals("school")){
-            CardView informalsCard = (CardView) findViewById(R.id.informals_viewgroup);
-            informalsCard.setVisibility(View.GONE);
-        }*/
+        SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String typeUser = prefs.getString("type", "user");
+            /*SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+            String background = prefs.getString("user_background", "college");//"No name defined" is the default value.
+            if(background.equals("school")){
+                CardView informalsCard = (CardView) findViewById(R.id.informals_viewgroup);
+                informalsCard.setVisibility(View.GONE);
+            }*/
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.check, userArrival);
+
         new HttpRequestTask(
                 new HttpRequest(process_URI, HttpRequest.GET),
                 new HttpRequest.Handler() {
@@ -221,9 +229,9 @@ public class UserCheckin extends SlidingActivity {
                             user_committee = ason.getString("Committee");
                             TextView committee = (TextView) findViewById(R.id.committeeView);
                             committee.setText(user_committee);
-                            String current_attendance = ason.getString("attendance");
-                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
-                            attendance.setText(current_attendance);
+                            //String current_attendance = ason.getString("attendance");
+                            //TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                            //attendance.setText(current_attendance);
                             String user_type = ason.getString("Country");
                             TextView type = (TextView) findViewById(R.id.countryView);
                             type.setText(user_type);
@@ -257,7 +265,62 @@ public class UserCheckin extends SlidingActivity {
                         }
                     }
                 }).execute();
+        new HttpRequestTask(
+                new HttpRequest(checkAttendance, HttpRequest.GET),
+                new HttpRequest.Handler() {
+
+                    @Override
+                    public void response(HttpResponse response) {
+                        if (response.code == 200) {
+                            Ason ason = new Ason(response.body);
+                            String current_attendance = ason.getString("attendance");
+                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                            attendance.setText(current_attendance);
+
+                        } else {
+                            String ai_response = "Can't reach the server at the moment. Please try again later.";
+                        }
+                    }
+                }).execute();
+
         setContent(R.layout.content_user_checkin);
+            /*NumberPicker numberPicker = (NumberPicker) findViewById(R.id.np);
+            numberPicker.setOnValueChangeListener(new OnValueChangeListener() {
+                @Override
+                public void onValueChanged(int newValue) {
+                    scrollValue = newValue;
+                }
+            });*/
+        NumberPicker numberPicker = (NumberPicker) findViewById(R.id.number_picker);
+        scrollValue = numberPicker.getValue();
+        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                scrollValue = newVal;
+                String changeAttendance = current_attendance + "session" + String.valueOf(scrollValue);
+                new HttpRequestTask(
+                        new HttpRequest(changeAttendance, HttpRequest.GET),
+                        new HttpRequest.Handler() {
+
+                            @Override
+                            public void response(HttpResponse response) {
+                                if (response.code == 200) {
+                                    Ason ason = new Ason(response.body);
+                                    String current_attendance = ason.getString("attendance");
+                                    TextView attendance = (TextView) findViewById(R.id.attendanceView);
+                                    attendance.setText(current_attendance);
+
+                                } else {
+                                    String rep_response = "Can't reach the server at the moment. Please try again later.";
+                                }
+                            }
+                        }).execute();
+            }
+        });
+        if (typeUser.equals("host") || typeUser.equals("user")) {
+            CardView pickerCard = (CardView) findViewById(R.id.session_viewgroup);
+            pickerCard.setVisibility(View.GONE);
+        }
 
     }
 

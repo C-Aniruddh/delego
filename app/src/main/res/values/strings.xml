@@ -157,4 +157,6 @@
     <string name="attendance1">Attendance</string>
     <string name="rsvp">RSVP</string>
     <string name="arrived">Arrived</string>
+    <string name="roboto_light">sans-serif-light</string>
+    <string name="number_picker_formatter">%02d</string>
 </resources>

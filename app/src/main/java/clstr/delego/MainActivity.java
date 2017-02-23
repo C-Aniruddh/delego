@@ -314,6 +314,10 @@ public class MainActivity extends AppCompatActivity
                 final String formals_URI = Constants.WEB_SERVER + "formals/" + user_idenfier + "&";
                 final String informals_URI = Constants.WEB_SERVER + "informals/" + user_idenfier + "&";
                 final String process_URI = Constants.WEB_SERVER + "user_details/" + user_idenfier;
+                final String attendance_URI = Constants.WEB_SERVER + "attendance/" + user_idenfier + "&";
+                final String checkAttendance = Constants.WEB_SERVER + "current_attendance/" + user_idenfier + "&";
+                profile.putExtra("user_attendance", attendance_URI);
+                profile.putExtra("user_check_attendance", checkAttendance);
                 profile.putExtra("user_formals", formals_URI);
                 profile.putExtra("user_informals", informals_URI);
                 profile.putExtra("key", process_URI);

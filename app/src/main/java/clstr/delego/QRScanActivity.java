@@ -46,6 +46,10 @@ public class QRScanActivity extends AppCompatActivity {
                     sendStuff.putExtra("user_arrival", arrival_URI);
                     final String formals_URI = Constants.WEB_SERVER + "formals/" + data + "&";
                     final String informals_URI = Constants.WEB_SERVER + "informals/" + data + "&";
+                    final String attendance_URI = Constants.WEB_SERVER + "attendance/" + data + "&";
+                    final String checkAttendance = Constants.WEB_SERVER + "current_attendance/" + data + "&";
+                    sendStuff.putExtra("user_attendance", attendance_URI);
+                    sendStuff.putExtra("user_check_attendance", checkAttendance);
                     sendStuff.putExtra("type", finalType);
                     sendStuff.putExtra("user_formals", formals_URI);
                     sendStuff.putExtra("user_informals", informals_URI);
@@ -57,8 +61,12 @@ public class QRScanActivity extends AppCompatActivity {
                     final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + data;
                     final String formals_URI = Constants.WEB_SERVER + "formals/" + data + "&";
                     final String informals_URI = Constants.WEB_SERVER + "informals/" + data + "&";
+                    final String attendance_URI = Constants.WEB_SERVER + "attendance/" + data + "&";
+                    final String checkAttendance = Constants.WEB_SERVER + "current_attendance/" + data + "&";
                     Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
                     sendStuff.putExtra("key", process_URI);
+                    sendStuff.putExtra("user_attendance", attendance_URI);
+                    sendStuff.putExtra("user_check_attendance", checkAttendance);
                     sendStuff.putExtra("user_arrival", arrival_URI);
                     sendStuff.putExtra("type", finalType);
                     sendStuff.putExtra("user_formals", formals_URI);
@@ -70,13 +78,14 @@ public class QRScanActivity extends AppCompatActivity {
                     flag = 1;
                     final String arrival_URI = Constants.WEB_SERVER + "user_arrival/" + data;
                     final String attendance_URI = Constants.WEB_SERVER + "attendance/" + data + "&";
+                    final String checkAttendance = Constants.WEB_SERVER + "current_attendance/" + data + "&";
                     Intent sendStuff = new Intent(QRScanActivity.this, UserCheckin.class);
                     sendStuff.putExtra("key", process_URI);
                     sendStuff.putExtra("user_arrival", arrival_URI);
                     sendStuff.putExtra("type", finalType);
                     sendStuff.putExtra("user_attendance", attendance_URI);
+                    sendStuff.putExtra("user_check_attendance", checkAttendance);
                     startActivity(sendStuff);
-
                 } else {
                     Log.d("QR", "Value : " + data);
                     final String process_URI = Constants.WEB_SERVER + "user_details/" + data;

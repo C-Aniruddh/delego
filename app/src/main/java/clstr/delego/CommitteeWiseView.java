@@ -174,8 +174,10 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
         final String attendance_URI = Constants.WEB_SERVER + "attendance/" + user_id + "&";
         final String formals_URI = Constants.WEB_SERVER + "formals/" + user_id + "&";
         final String informals_URI = Constants.WEB_SERVER + "informals/" + user_id + "&";
+        final String checkAttendance = Constants.WEB_SERVER + "current_attendance/" + user_id + "&";
         Intent sendStuff = new Intent(CommitteeWiseView.this, UserCheckin.class);
         sendStuff.putExtra("user_attendance", attendance_URI);
+        sendStuff.putExtra("user_check_attendance", checkAttendance);
         sendStuff.putExtra("key", process_URI);
         sendStuff.putExtra("user_arrival", arrival_URI);
         sendStuff.putExtra("user_formals", formals_URI);
