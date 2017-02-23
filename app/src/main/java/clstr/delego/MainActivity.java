@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private String user_type;
     private String name;
     private String email;
+    private String user_idenfier;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity
         name = prefs.getString("fullname", "Delego");
         email = prefs.getString("email_id", "delego@clstr.tech");
         user_type = prefs.getString("type", "user");
+        user_idenfier = prefs.getString("user_identifier", "LOL");
 
         //  Declare a new thread to do a preference check
         final String finalStatus = status;
@@ -308,8 +310,14 @@ public class MainActivity extends AppCompatActivity
                 startActivity(qr_scan);
                 // Handle the camera action
             } else if (id == 2){
-                Snackbar.make(getWindow().getDecorView().getRootView(), "Profile", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                Intent profile = new Intent(MainActivity.this, UserProfile.class);
+                final String formals_URI = Constants.WEB_SERVER + "formals/" + user_idenfier + "&";
+                final String informals_URI = Constants.WEB_SERVER + "informals/" + user_idenfier + "&";
+                final String process_URI = Constants.WEB_SERVER + "user_details/" + user_idenfier;
+                profile.putExtra("user_formals", formals_URI);
+                profile.putExtra("user_informals", informals_URI);
+                profile.putExtra("key", process_URI);
+                startActivity(profile);
             } else if (id == 3){
                 Snackbar.make(getWindow().getDecorView().getRootView(), "Schedule", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();

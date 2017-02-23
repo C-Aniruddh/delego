@@ -441,6 +441,8 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         String auth_token = responseJSON.getString("auth_token");
                         String fullname = responseJSON.getString("fullname");
                         String committee = responseJSON.getString("login_committee");
+                        String identifier = responseJSON.getString("login_identifier");
+                        String background = responseJSON.getString("login_background");
                         SharedPreferences.Editor editor = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE).edit();
                         editor.putString("fullname", fullname);
                         editor.putString("auth_token", auth_token);
@@ -448,7 +450,9 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                         editor.putString("username", username);
                         editor.putString("email_id", email_id);
                         editor.putString("user_status", "true");
+                        editor.putString("user_identifier", identifier);
                         editor.putString("user_committee", committee);
+                        editor.putString("user_background", background);
                         editor.commit();
                         Intent main = new Intent(LoginActivity.this, MainActivity.class);
                         startActivity(main);

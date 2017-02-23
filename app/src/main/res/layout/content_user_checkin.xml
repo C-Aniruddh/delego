@@ -329,6 +329,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:onClick="formalsDialog"
         android:visibility="visible"
         app:cardCornerRadius="2dp"
         app:elevation="2dp">
@@ -380,7 +381,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
-                    android:onClick="formalsDialog"
                     android:text="@string/numeric_id" />
 
             </LinearLayout>
@@ -394,6 +394,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:onClick="informalsDialog"
         android:visibility="visible"
         app:cardCornerRadius="2dp"
         app:elevation="2dp">
@@ -445,7 +446,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
-                    android:onClick="informalsDialog"
                     android:text="@string/numeric_id" />
 
             </LinearLayout>
@@ -459,6 +459,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:onClick="callUser"
         android:visibility="visible"
         app:cardCornerRadius="2dp"
         app:elevation="2dp">
@@ -510,7 +511,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
-                    android:onClick="callUser"
                     android:text="@string/xxxxx_xxxxx" />
 
             </LinearLayout>
@@ -523,6 +523,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
+        android:onClick="mailUser"
         android:visibility="visible"
         app:cardCornerRadius="2dp"
         app:elevation="2dp">
@@ -574,7 +575,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="32dp"
-                    android:onClick="mailUser"
                     android:text="@string/delegate_clstr_tech" />
 
             </LinearLayout>

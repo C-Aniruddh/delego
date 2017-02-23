@@ -16,10 +16,6 @@ import com.apptakk.http_request.HttpRequestTask;
 import com.apptakk.http_request.HttpResponse;
 import com.koushikdutta.urlimageviewhelper.UrlImageViewHelper;
 
-import clstr.delego.R;
-
-import static android.R.attr.key;
-
 public class UserDetails extends AppCompatActivity {
 
     private CollapsingToolbarLayout collapsingToolbar;
@@ -40,6 +36,7 @@ public class UserDetails extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
         Bundle b = getIntent().getExtras();
         String process_URI = b.getString("key");
         new HttpRequestTask(

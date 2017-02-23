@@ -38,149 +38,15 @@ public class UserProfile extends SlidingActivity {
     public String user_email = "";
     public String user_phone = "";
     public String attendance_URI;
+    public String informalsURI;
+    public String formalsURI;
 
     @Bind(R.id.phone_viewgroup)
     CardView phoneView;
     @Bind(R.id.email_viewgroup)
     CardView emailView;
-    private View.OnClickListener userArrival = new View.OnClickListener() {
-        public void onClick(View v) {
-            Bundle b = getIntent().getExtras();
-            String arrival_URI = b.getString("user_arrival");
-            SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
-            String type;
-            type = prefs.getString("type", "owner");
-
-            attendance_URI = b.getString("user_attendance");
-            if (type.equals("owner")) {
-                new HttpRequestTask(
-                        new HttpRequest(arrival_URI, HttpRequest.GET),
-                        new HttpRequest.Handler() {
-
-                            @Override
-                            public void response(HttpResponse response) {
-                                if (response.code == 200) {
-                                    String server_response = "The delegate has arrived!";
-                                    Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                            .setAction("Action", null).show();
-                                    FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
-                                    fab.setBackgroundColor(Color.parseColor("#2E7D32"));
-
-
-                                } else {
-                                    String server_response = "Can't reach the server at the moment. Please try again later.";
-                                    Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                            .setAction("Action", null).show();
-                                }
-                            }
-                        }).execute();
-            } else if (type.equals("rapporteur")) {
-                makeAttendanceDialog();
-            }
-
-        }
-    };
 
     public void makeAttendanceDialog() {
-        new MaterialStyledDialog.Builder(this)
-                .setTitle("Set Attendance")
-                .setDescription("Is the delegate present and voting, present or absent?")
-                .setHeaderColor(R.color.dialog_header)
-                .setStyle(Style.HEADER_WITH_TITLE)
-                .setPositiveText("Present and Voting")
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    String final_attendance = attendance_URI + "Present%20And%20Voting";
-
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new HttpRequestTask(
-                                new HttpRequest(final_attendance, HttpRequest.GET),
-                                new HttpRequest.Handler() {
-
-                                    @Override
-                                    public void response(HttpResponse response) {
-                                        if (response.code == 200) {
-                                            String server_response = "The delegate is Present and Voting";
-                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
-                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
-                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
-                                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
-                                            attendance.setText("Present and Voting");
-
-
-                                        } else {
-                                            String server_response = "Can't reach the server at the moment. Please try again later.";
-                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
-                                        }
-                                    }
-                                }).execute();
-                    }
-                })
-                .setNegativeText("Present")
-                .onNegative(new MaterialDialog.SingleButtonCallback() {
-                    String final_attendance = attendance_URI + "Present";
-
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new HttpRequestTask(
-                                new HttpRequest(final_attendance, HttpRequest.GET),
-                                new HttpRequest.Handler() {
-
-                                    @Override
-                                    public void response(HttpResponse response) {
-                                        if (response.code == 200) {
-                                            String server_response = "The delegate has been marked Present";
-                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
-                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
-                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
-
-                                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
-                                            attendance.setText("Present");
-
-                                        } else {
-                                            String server_response = "Can't reach the server at the moment. Please try again later.";
-                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
-                                        }
-                                    }
-                                }).execute();
-                    }
-                })
-                .setNeutralText("Absent")
-                .onNeutral(new MaterialDialog.SingleButtonCallback() {
-                    String final_attendance = attendance_URI + "Absent";
-
-                    @Override
-                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
-                        new HttpRequestTask(
-                                new HttpRequest(final_attendance, HttpRequest.GET),
-                                new HttpRequest.Handler() {
-
-                                    @Override
-                                    public void response(HttpResponse response) {
-                                        if (response.code == 200) {
-                                            String server_response = "The delegate has been marked Absent";
-                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
-                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
-                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
-                                            TextView attendance = (TextView) findViewById(R.id.attendanceView);
-                                            attendance.setText("Absent");
-                                        } else {
-                                            String server_response = "Can't reach the server at the moment. Please try again later.";
-                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
-                                                    .setAction("Action", null).show();
-                                        }
-                                    }
-                                }).execute();
-                    }
-                })
-                //.setCancelable(true)
-                .setScrollable(true)
-                .show();
     }
 
     @Override
@@ -188,7 +54,6 @@ public class UserProfile extends SlidingActivity {
         Bundle b = getIntent().getExtras();
         String process_URI = b.getString("key");
         enableFullscreen();
-        setFab(getResources().getColor(R.color.colorAccent), R.drawable.check, userArrival);
         new HttpRequestTask(
                 new HttpRequest(process_URI, HttpRequest.GET),
                 new HttpRequest.Handler() {
@@ -211,7 +76,7 @@ public class UserProfile extends SlidingActivity {
                             String user_type = ason.getString("Country");
                             TextView type = (TextView) findViewById(R.id.countryView);
                             type.setText(user_type);
-                            String user_id = ason.getString("Numid");
+                            String user_id = ason.getString("RSVP");
                             TextView id = (TextView) findViewById(R.id.idView);
                             id.setText(user_id);
                             String user_role = ason.getString("Role");
@@ -223,6 +88,12 @@ public class UserProfile extends SlidingActivity {
                             user_email = ason.getString("Email");
                             TextView email = (TextView) findViewById(R.id.emailView);
                             email.setText(user_email);
+                            String user_formals = ason.getString("formals");
+                            TextView formals = (TextView) findViewById(R.id.formalsView);
+                            formals.setText(user_formals);
+                            String user_informals = ason.getString("informals");
+                            TextView informals = (TextView) findViewById(R.id.informalView);
+                            informals.setText(user_informals);
                         } else {
                             String ai_response = "Can't reach the server at the moment. Please try again later.";
                             TextView textView = (TextView) findViewById(R.id.idView);
@@ -247,6 +118,160 @@ public class UserProfile extends SlidingActivity {
             return;
         }
         startActivity(intent);
+    }
+
+    public void formalsDialog(View v) {
+        SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String type;
+        type = prefs.getString("type", "owner");
+        String committee = prefs.getString("user_committee", "None");
+        Bundle b = getIntent().getExtras();
+        formalsURI = b.getString("user_formals");
+        new MaterialStyledDialog.Builder(this)
+                .setTitle("Formal Socials")
+                .setDescription("Are you attending formal socials?")
+                .setHeaderColor(R.color.dialog_header)
+                .setStyle(Style.HEADER_WITH_TITLE)
+                .setNegativeText("Attending")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    String final_attendance = formalsURI + "Attending";
+
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new HttpRequestTask(
+                                new HttpRequest(final_attendance, HttpRequest.GET),
+                                new HttpRequest.Handler() {
+
+                                    @Override
+                                    public void response(HttpResponse response) {
+                                        if (response.code == 200) {
+                                            String server_response = "You are attending";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+
+                                            TextView attendance = (TextView) findViewById(R.id.formalsView);
+                                            attendance.setText("Present");
+
+                                        } else {
+                                            String server_response = "Can't reach the server at the moment. Please try again later.";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                        }
+                                    }
+                                }).execute();
+                    }
+                })
+                .setNeutralText("Not Attending")
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    String final_attendance = formalsURI + "Not%20Attending";
+
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new HttpRequestTask(
+                                new HttpRequest(final_attendance, HttpRequest.GET),
+                                new HttpRequest.Handler() {
+
+                                    @Override
+                                    public void response(HttpResponse response) {
+                                        if (response.code == 200) {
+                                            String server_response = "You are not attending";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+                                            TextView attendance = (TextView) findViewById(R.id.formalsView);
+                                            attendance.setText("Not Attending");
+                                        } else {
+                                            String server_response = "Can't reach the server at the moment. Please try again later.";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                        }
+                                    }
+                                }).execute();
+                    }
+                })
+                //.setCancelable(true)
+                .setScrollable(true)
+                .show();
+    }
+
+    public void informalsDialog(View v) {
+        SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String type;
+        type = prefs.getString("type", "owner");
+        String committee = prefs.getString("user_committee", "None");
+        Bundle b = getIntent().getExtras();
+        informalsURI = b.getString("user_informals");
+        new MaterialStyledDialog.Builder(this)
+                .setTitle("Informal Socials")
+                .setDescription("Are you attending the Informal Socials?")
+                .setHeaderColor(R.color.dialog_header)
+                .setStyle(Style.HEADER_WITH_TITLE)
+                .setNegativeText("Attending")
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    String final_attendance = informalsURI + "Attending";
+
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new HttpRequestTask(
+                                new HttpRequest(final_attendance, HttpRequest.GET),
+                                new HttpRequest.Handler() {
+
+                                    @Override
+                                    public void response(HttpResponse response) {
+                                        if (response.code == 200) {
+                                            String server_response = "You are attending";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+
+                                            TextView attendance = (TextView) findViewById(R.id.informalView);
+                                            attendance.setText("Present");
+
+                                        } else {
+                                            String server_response = "Can't reach the server at the moment. Please try again later.";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                        }
+                                    }
+                                }).execute();
+                    }
+                })
+                .setNeutralText("Not Attending")
+                .onNeutral(new MaterialDialog.SingleButtonCallback() {
+                    String final_attendance = informalsURI + "Not%20Attending";
+
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        new HttpRequestTask(
+                                new HttpRequest(final_attendance, HttpRequest.GET),
+                                new HttpRequest.Handler() {
+
+                                    @Override
+                                    public void response(HttpResponse response) {
+                                        if (response.code == 200) {
+                                            String server_response = "You are not attending";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                            FloatingActionButton fab = (FloatingActionButton) getWindow().getDecorView().getRootView().findViewById(R.id.fab);
+                                            fab.setBackgroundColor(Color.parseColor("#2E7D32"));
+                                            TextView attendance = (TextView) findViewById(R.id.informalView);
+                                            attendance.setText("Not Attending");
+                                        } else {
+                                            String server_response = "Can't reach the server at the moment. Please try again later.";
+                                            Snackbar.make(getWindow().getDecorView().getRootView(), server_response, Snackbar.LENGTH_LONG)
+                                                    .setAction("Action", null).show();
+                                        }
+                                    }
+                                }).execute();
+                    }
+                })
+                //.setCancelable(true)
+                .setScrollable(true)
+                .show();
     }
 
     public void mailUser(View v) {

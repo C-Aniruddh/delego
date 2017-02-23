@@ -198,6 +198,12 @@ public class UserCheckin extends SlidingActivity {
         Bundle b = getIntent().getExtras();
         String process_URI = b.getString("key");
         enableFullscreen();
+        /*SharedPreferences prefs = getSharedPreferences(Constants.USER_AUTH, MODE_PRIVATE);
+        String background = prefs.getString("user_background", "college");//"No name defined" is the default value.
+        if(background.equals("school")){
+            CardView informalsCard = (CardView) findViewById(R.id.informals_viewgroup);
+            informalsCard.setVisibility(View.GONE);
+        }*/
         setFab(getResources().getColor(R.color.colorAccent), R.drawable.check, userArrival);
         new HttpRequestTask(
                 new HttpRequest(process_URI, HttpRequest.GET),
@@ -239,6 +245,11 @@ public class UserCheckin extends SlidingActivity {
                             String user_informals = ason.getString("informals");
                             TextView informals = (TextView) findViewById(R.id.informalView);
                             informals.setText(user_informals);
+                            String background = ason.getString("background");
+                            if (background.equals("school")) {
+                                CardView informalsCard = (CardView) findViewById(R.id.informals_viewgroup);
+                                informalsCard.setVisibility(View.GONE);
+                            }
                         } else {
                             String ai_response = "Can't reach the server at the moment. Please try again later.";
                             TextView textView = (TextView) findViewById(R.id.idView);
@@ -387,7 +398,7 @@ public class UserCheckin extends SlidingActivity {
                 Bundle b = getIntent().getExtras();
                 informalsURI = b.getString("user_informals");
                 new MaterialStyledDialog.Builder(this)
-                        .setTitle("Formal Socials")
+                        .setTitle("Informal Socials")
                         .setDescription("Is the delegate attending informal socials?")
                         .setHeaderColor(R.color.dialog_header)
                         .setStyle(Style.HEADER_WITH_TITLE)
