@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity
             menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
             menu.add(R.id.menu_item, 2, 200, "All members").setIcon(R.drawable.account_multiple);
             menu.add(R.id.menu_item, 3, 300, "Search").setIcon(R.drawable.account_search);
-            menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
+            //menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
             menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
             menu.setGroupCheckable(R.id.menu_item, true, true);
             menu.setGroupVisible(R.id.menu_item, true);
@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity
             menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
             menu.add(R.id.menu_item, 2, 200, "My Committee").setIcon(R.drawable.account_multiple);
             menu.add(R.id.menu_item, 3, 300, "Search").setIcon(R.drawable.account_search);
-            menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
+            //menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
             menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
             menu.setGroupCheckable(R.id.menu_item, true, true);
             menu.setGroupVisible(R.id.menu_item, true);
@@ -137,7 +137,7 @@ public class MainActivity extends AppCompatActivity
             menu.add(R.id.menu_item, 1, 100, "Scan QR Code").setIcon(R.drawable.qrcode_scan);
             menu.add(R.id.menu_item, 2, 200, "My Committee").setIcon(R.drawable.account_multiple);
             menu.add(R.id.menu_item, 3, 300, "Search").setIcon(R.drawable.account_search);
-            menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
+            //menu.add(R.id.menu_item, 4, 400, "Add Delegate").setIcon(R.drawable.account_multiple_plus);
             menu.add(R.id.extra, 5, 500, "Logout").setIcon(R.drawable.logout);
             menu.setGroupCheckable(R.id.menu_item, true, true);
             menu.setGroupVisible(R.id.menu_item, true);

@@ -9,10 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.Toast;
 
 import clstr.delego.adapters.ImageAdapter;
-import clstr.delego.models.Delegate;
 
 public class DelegateSortView extends AppCompatActivity {
 
@@ -21,7 +19,7 @@ public class DelegateSortView extends AppCompatActivity {
             "UNSC", "DISEC", "UNSRM",
             "UNHRC", "GA Legal", "ECOFIN",
             "India-Pak", "India, Inc", "League of Nations",
-            "Specpol", "UNEA"
+            "Specpol", "UNEA", "IPC"
     } ;
     int[] imageId = {
             R.drawable.unsc, R.drawable.disec,
@@ -29,7 +27,7 @@ public class DelegateSortView extends AppCompatActivity {
             R.drawable.ga_legal, R.drawable.ecofin,
             R.drawable.league_of_nations, R.drawable.india_inc,
             R.drawable.league_of_nations, R.drawable.specpol,
-            R.drawable.unea
+            R.drawable.unea, R.drawable.unhrc
 
     };
 

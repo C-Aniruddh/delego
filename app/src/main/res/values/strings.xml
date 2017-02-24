@@ -1,7 +1,11 @@
 <resources>
     <string name="app_name">Delego</string>
     <string name="title_activity_user_details">UserDetails</string>
+    <string name="formals_details">Lights, Camera, Action! Bring out the bollywood fan in you and put on your dancing shoes. This year at our formal socials, come enjoy our hospitality at the Quint Essential Bollywood Night and revel in an evening of desi tunes, fun games and lots of dancing! Come experience Mumbai in Bollywood style.</string>
+    <string name="informals_details">Intense debates during the day and thrilling escapades at night. Here at Mumbai MUN diplomacy prevails all day, but at night its \'Anarchy\'. Join us as we strive to make your experience unparalleled; the perfect blend of both words.</string>
+    <string name="delegate_lounge">Unwid from heated committee sessions with Fifa 17, Table Tennis, a guitar or a VR simulation! Adding to your delegate experience, we open to you "The Delegate Lounge".</string>
     <string name="large_text">
+
         "Material is the metaphor.\n\n"
 
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."

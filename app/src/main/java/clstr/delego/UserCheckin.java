@@ -40,6 +40,7 @@ public class UserCheckin extends SlidingActivity {
     public String user_phone = "";
     public String attendance_URI;
     public String user_committee;
+    public String user_background = "";
     public String formalsURI;
     public String informalsURI;
     public int scrollValue;
@@ -266,8 +267,8 @@ public class UserCheckin extends SlidingActivity {
                             String user_informals = ason.getString("informals");
                             TextView informals = (TextView) findViewById(R.id.informalView);
                             informals.setText(user_informals);
-                            String background = ason.getString("background");
-                            if (background.equals("school")) {
+                            user_background = ason.getString("background");
+                            if (user_background.equals("school")) {
                                 CardView informalsCard = (CardView) findViewById(R.id.informals_viewgroup);
                                 informalsCard.setVisibility(View.GONE);
                             }

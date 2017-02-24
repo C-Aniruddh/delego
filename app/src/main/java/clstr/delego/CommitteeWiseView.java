@@ -94,14 +94,14 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
             mListView.setOnItemClickListener(this);
             new LoadJSONTask(this).execute(final_uri);
         } else if (position == 6){
-            String final_uri = URL + "Indo%20-%20Pak";
+            String final_uri = URL + "Indo-Pak";
             collapsibleToolbar.setTitle("Indo-Pak");
             image.setImageResource(R.drawable.league_of_nations);
             mListView = (ListView) findViewById(R.id.list_view_commwise);
             mListView.setOnItemClickListener(this);
             new LoadJSONTask(this).execute(final_uri);
         } else if (position == 7){
-            String final_uri = URL + "India, Inc";
+            String final_uri = URL + "India-Inc";
             final_uri = final_uri.replaceAll(" ", "%20");
             collapsibleToolbar.setTitle("India, Inc");
             image.setImageResource(R.drawable.india_inc);
@@ -109,8 +109,7 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
             mListView.setOnItemClickListener(this);
             new LoadJSONTask(this).execute(final_uri);
         } else if (position == 8){
-            String final_uri = URL + "League of Nations";
-            final_uri = final_uri.replaceAll(" ", "%20");
+            String final_uri = URL + "League-of-Nations";
             collapsibleToolbar.setTitle("League of Nations");
             image.setImageResource(R.drawable.league_of_nations);
             mListView = (ListView) findViewById(R.id.list_view_commwise);
@@ -127,6 +126,16 @@ public class CommitteeWiseView extends AppCompatActivity implements LoadJSONTask
             String final_uri = URL + "UNEA";
             collapsibleToolbar.setTitle("UNEA");
             image.setImageResource(R.drawable.unea);
+            mListView = (ListView) findViewById(R.id.list_view_commwise);
+            mListView.setOnItemClickListener(this);
+            new LoadJSONTask(this).execute(final_uri);
+        } else if (position == 11) {
+            String final_uri = URL + "IPC";
+            collapsibleToolbar.setTitle("IPC");
+            image.setImageResource(R.drawable.unea);
+            mListView = (ListView) findViewById(R.id.list_view_commwise);
+            mListView.setOnItemClickListener(this);
+            new LoadJSONTask(this).execute(final_uri);
         }
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
